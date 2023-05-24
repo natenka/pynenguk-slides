@@ -54,36 +54,35 @@ flowchart TD
 ---
 ## Типи даних у Python
 
-| Название    | Название        | Пример |
+| Назва    | Назва        | Приклад |
 |-------------|-----------------|--------------|
-| Number      | число           | ``1, 100`` |
-|             |                 |
-| String      | строка          | ``"interface Gi0/0"`` |
+| String      | рядок          | ``"interface Gi0/0"`` |
 |             |                 |
 | List        | список          | ``[1, 2, 3]`` |
 |             |                 |
-| Dictionary  | словарь         | ``{"username": "user1", "permissions": 100}`` |
+| Dictionary  | словник         | ``{"username": "user1", "permissions": 100}`` |
 |             |                 |
 | Tuple       | кортеж          | ``("line console 0", "login local")`` |
 |             |                 |
-| Set         | множество       | ``{3, 10, 100, 4, 5}`` |
+| Set         | множина       | ``{3, 10, 100, 4, 5}`` |
 |             |                 |
-| Boolean     | булево значение | ``True, False`` |
+| Boolean     | логічний тип даних | ``True, False`` |
+
 
 ---
 ## Типи даних у Python
 
 |             |               |
 |-------------|--------------|
-| String      | Для хранения текста и произвольных данных, для которых в Python нет типа |
-| List        | Набор данных, очень часто однотипных данных: список вланов, команд, строк файла |
-| Dictionary  | Используется для данных типа поле: значение |
-| Tuple       | Неизменяемый набор данных, который часто возвращается из внешних источников - БД, CSV. |
-|             | Также используется когда данные это набор значений: (x, y) |
-| Set         | Для хранения уникальных данных. Плюс часто используется промежуточно для |
-|             | операций с множествами |
-| Boolean     | Указывает, что какое-то значение истинное или ложное. Например {"routing": True} |
-| None        | Используется, когда надо указать, что в этом месте нет никакого значения |
+| String      | Для зберігання тексту та довільних даних, для яких у Python немає типу |
+| List        | Набір даних, часто однотипних даних: список вланів, команд, рядків файлу |
+| Dictionary  | Використовується для даних типу поле: значення |
+| Tuple       | Незмінний набір даних, який часто повертається із зовнішніх джерел - БД, CSV.
+|             | Також використовується коли дані є набір значень: ``(x, y)`` |
+| Set         | Для збереження унікальних даних. Плюс часто використовується |
+|             | для операцій з множинами |
+| Boolean     | Вказує, що якесь значення є справжнім або хибним |
+| None        | Використовується, коли потрібно вказати, що тут немає ніякого значення |
 
 
 |             |              |
@@ -96,15 +95,17 @@ flowchart TD
 | Boolean     | True, False |
 
 
----
-## Строки (Strings)
 
 ---
-### Строки
+## Рядки (Strings)
 
-Строка в Python:
-* последовательность символов, заключенная в кавычки
-* неизменяемый упорядоченный тип данных
+---
+### Рядки
+
+Рядок в Python:
+
+* послідовність символів у лапках
+* незмінний упорядкований тип даних
 
 ```python
 In [9]: 'Hello'
@@ -115,7 +116,7 @@ Out[10]: 'Hello'
 ```
 
 ---
-### Строки
+### Рядки
 
 ```python
 tunnel = """
@@ -140,21 +141,76 @@ interface Tunnel0
  tunnel protection ipsec profile DMVPN
 ```
 
+---
+### Дії з рядками
+
+```
+In [10]: from rich import inspect
+
+In [13]: inspect(str, methods=True)
+╭───────────────────────────────────────────────────────────── <class 'str'> ─────────────────────────────────────────────────────────────╮
+│ def str(...)                                                                                                                            │
+│                                                                                                                                         │
+│ str(object='') -> str                                                                                                                   │
+│ str(bytes_or_buffer[, encoding[, errors]]) -> str                                                                                       │
+│                                                                                                                                         │
+│   capitalize = def capitalize(self, /): Return a capitalized version of the string.                                                     │
+│     casefold = def casefold(self, /): Return a version of the string suitable for caseless comparisons.                                 │
+│       center = def center(self, width, fillchar=' ', /): Return a centered string of length width.                                      │
+│        count = def count(...) S.count(sub[, start[, end]]) -> int                                                                       │
+│       encode = def encode(self, /, encoding='utf-8', errors='strict'): Encode the string using the codec registered for encoding.       │
+│     endswith = def endswith(...) S.endswith(suffix[, start[, end]]) -> bool                                                             │
+│   expandtabs = def expandtabs(self, /, tabsize=8): Return a copy where all tab characters are expanded using spaces.                    │
+│         find = def find(...) S.find(sub[, start[, end]]) -> int                                                                         │
+│       format = def format(...) S.format(*args, **kwargs) -> str                                                                         │
+│   format_map = def format_map(...) S.format_map(mapping) -> str                                                                         │
+│        index = def index(...) S.index(sub[, start[, end]]) -> int                                                                       │
+│      isalnum = def isalnum(self, /): Return True if the string is an alpha-numeric string, False otherwise.                             │
+│      isalpha = def isalpha(self, /): Return True if the string is an alphabetic string, False otherwise.                                │
+│      isascii = def isascii(self, /): Return True if all characters in the string are ASCII, False otherwise.                            │
+│    isdecimal = def isdecimal(self, /): Return True if the string is a decimal string, False otherwise.                                  │
+│      isdigit = def isdigit(self, /): Return True if the string is a digit string, False otherwise.                                      │
+│ isidentifier = def isidentifier(self, /): Return True if the string is a valid Python identifier, False otherwise.                      │
+│      islower = def islower(self, /): Return True if the string is a lowercase string, False otherwise.                                  │
+│    isnumeric = def isnumeric(self, /): Return True if the string is a numeric string, False otherwise.                                  │
+│  isprintable = def isprintable(self, /): Return True if the string is printable, False otherwise.                                       │
+│      isspace = def isspace(self, /): Return True if the string is a whitespace string, False otherwise.                                 │
+│      istitle = def istitle(self, /): Return True if the string is a title-cased string, False otherwise.                                │
+│      isupper = def isupper(self, /): Return True if the string is an uppercase string, False otherwise.                                 │
+│         join = def join(self, iterable, /): Concatenate any number of strings.                                                          │
+│        ljust = def ljust(self, width, fillchar=' ', /): Return a left-justified string of length width.                                 │
+│        lower = def lower(self, /): Return a copy of the string converted to lowercase.                                                  │
+│       lstrip = def lstrip(self, chars=None, /): Return a copy of the string with leading whitespace removed.                            │
+│    maketrans = def maketrans(...) Return a translation table usable for str.translate().                                                │
+│    partition = def partition(self, sep, /): Partition the string into three parts using the given separator.                            │
+│      replace = def replace(self, old, new, count=-1, /): Return a copy with all occurrences of substring old replaced by new.           │
+│        rfind = def rfind(...) S.rfind(sub[, start[, end]]) -> int                                                                       │
+│       rindex = def rindex(...) S.rindex(sub[, start[, end]]) -> int                                                                     │
+│        rjust = def rjust(self, width, fillchar=' ', /): Return a right-justified string of length width.                                │
+│   rpartition = def rpartition(self, sep, /): Partition the string into three parts using the given separator.                           │
+│       rsplit = def rsplit(self, /, sep=None, maxsplit=-1): Return a list of the words in the string, using sep as the delimiter string. │
+│       rstrip = def rstrip(self, chars=None, /): Return a copy of the string with trailing whitespace removed.                           │
+│        split = def split(self, /, sep=None, maxsplit=-1): Return a list of the words in the string, using sep as the delimiter string.  │
+│   splitlines = def splitlines(self, /, keepends=False): Return a list of the lines in the string, breaking at line boundaries.          │
+│   startswith = def startswith(...) S.startswith(prefix[, start[, end]]) -> bool                                                         │
+│        strip = def strip(self, chars=None, /): Return a copy of the string with leading and trailing whitespace removed.                │
+│     swapcase = def swapcase(self, /): Convert uppercase characters to lowercase and lowercase characters to uppercase.                  │
+│        title = def title(self, /): Return a version of the string where each word is titlecased.                                        │
+│    translate = def translate(self, table, /): Replace each character in the string using the given translation table.                   │
+│        upper = def upper(self, /): Return a copy of the string converted to uppercase.                                                  │
+│        zfill = def zfill(self, width, /): Pad a numeric string with zeros on the left, to fill a field of the given width.              │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```
 
 ---
-### Строки. Индекс
+### Рядки. Індекс
 
-Обращение по индексу к символам:
 ```python
 In [20]: string1 = 'interface FastEthernet1/0'
 
 In [21]: string1[0]
 Out[21]: 'i'
-```
 
-Если нужно обратиться к какому-то по счету символу, начиная с конца, то можно указывать отрицательные значения (на этот раз с единицы).
-
-```python
 In [22]: string1[1]
 Out[22]: 'n'
 
@@ -163,33 +219,25 @@ Out[23]: '0'
 ```
 
 ---
-### Строки. Срез
+### Рядки. Зрізи
 
-Срез строки (срез выполняется по второе число, не включая его):
 ```python
 In [24]: string1[0:9]
 Out[24]: 'interface'
 
 In [25]: string1[10:22]
 Out[25]: 'FastEthernet'
-```
 
-Если не указывается второе число, то срез будет до конца строки:
-```python
 In [26]:  string1[10:]
 Out[26]: 'FastEthernet1/0'
-```
 
-Срезать три последних символа строки:
-```python
 In [27]: string1[-3:]
 Out[27]: '1/0'
 ```
 
 ---
-### Строки
+### Рядки
 
-Строка в обратном порядке:
 ```python
 In [28]: a = '0123456789'
 
@@ -200,27 +248,11 @@ In [30]: a[::-1]
 Out[30]: '9876543210'
 ```
 
----
-### Строки
-
-Записи ```a[::]``` и ```a[:]``` дают одинаковый результат, но двойное двоеточие позволяет указывать, что надо брать не каждый элемент, а, например, каждый второй.
-
-Например, таким образом можно получить все четные числа строки a:
-```python
-In [31]: a[::2]
-Out[31]: '02468'
-```
-
-Так можно получить нечетные:
-```python
-In [32]: a[1::2]
-Out[32]: '13579'
-```
 
 ---
-### Строки
+### Рядки
 
-Строки можно суммировать. Тогда они объединяются в одну строку:
+Рядки можна підсумовувати. Тоді вони об'єднуються в один рядок:
 ```python
 In [14]: intf = 'interface'
 
@@ -234,7 +266,8 @@ Out[17]: 'interface Tunnel0'
 ```
 
 
-Строку можно умножать на число. В этом случае, строка повторяется указанное количество раз:
+Рядок можна множити на число. У цьому випадку рядок повторюється вказану
+кількість разів:
 ```python
 In [18]: intf * 5
 Out[18]: 'interfaceinterfaceinterfaceinterfaceinterface'
@@ -244,14 +277,14 @@ Out[19]: '########################################'
 ```
 
 ---
-### Полезные методы для работы со строками
+### Корисні методи для роботи з рядками
 
 При автоматизации очень часто надо будет работать со строками, так как конфигурационный файл, вывод команд и отправляемые команды - это строки.
 Знание различных методов (то есть, действий), которые можно применять к строкам, помогает более эффективно работать с ними.
-Строки неизменяемый тип данных, поэтому все методы, которые преобразуют строку возвращают новую строку, а исходная строка остается неизменной.
+Рядки неизменяемый тип данных, поэтому все методы, которые преобразуют строку возвращают новую строку, а исходная строка остается неизменной.
 
 ---
-### Полезные методы для работы со строками
+### Корисні методи для роботи з рядками
 
 |             |  Разделение строки на части |
 |:------------|:-----------------------------------------------------------------------------|
@@ -278,7 +311,7 @@ Out[19]: '########################################'
 |        |  |
 
 ---
-### Полезные методы для работы со строками
+### Корисні методи для роботи з рядками
 
 |  | Проверка того, что находится в строке |
 |:------------------|:-------------------------------------------------------------------------|
@@ -310,7 +343,7 @@ Out[19]: '########################################'
 
 
 ---
-### Полезные методы для работы со строками
+### Корисні методи для роботи з рядками
 
 
 |  | Выравнивание текста |
@@ -365,7 +398,7 @@ Out[30]: 'Tunnel 0'
 ```
 
 ---
-### Строки - неизменяемый тип данных
+### Рядки - неизменяемый тип данных
 
 Очень важно обращать внимание на то, что часто методы возвращают преобразованную строку. И, значит, надо не забыть присвоить ее какой-то переменной (можно той же).
 ```python
