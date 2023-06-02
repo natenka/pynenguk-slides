@@ -116,6 +116,39 @@ a = 10
 b = 5
 ```
 
+---
+### Коментарі
+
+
+```python
+vlans = [10, 20, 30] # some comment
+b = 5 # another text
+```
+
+```python
+# some comment
+vlans = [10, 20, 30]
+
+# another text
+b = 5
+```
+
+```python
+vlans = [10, 20, 30]  # some comment
+b = 5                 # another text
+```
+
+---
+### Коментарі
+
+```python
+def function(a, b):
+    """
+    a line drawn under a word
+    or phrase for emphasis
+    """
+    return a + b
+```
 
 ---
 ### print
