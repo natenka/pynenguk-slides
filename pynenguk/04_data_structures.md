@@ -307,7 +307,6 @@ Out[19]: '########################################'
 
 |             |  Поділ рядка на частини |
 |:------------|:-----------------------------------------------------------------------------|
-| join        | Concatenate any number of strings.                                           |
 | split       | Return a list of the words in the string, using sep as the delimiter string. |
 | splitlines  | Return a list of the lines in the string, breaking at line boundaries.       |
 | partition   | Partition the string into three parts using the given separator.             |
@@ -370,7 +369,6 @@ Out[19]: '########################################'
 | center | Return a centered string of length width.                                        |
 | ljust  | Return a left-justified string of length width.                                  |
 | rjust  | Return a right-justified string of length width.                                 |
-| zfill                | Pad a numeric string with zeros on the left, to fill a field of the given width. |
 |        |  |
 
 
@@ -379,13 +377,15 @@ Out[19]: '########################################'
 | count   | S.count(sub[, start[, end]]) -> int  |
 | find    | S.find(sub[, start[, end]]) -> int   |
 | index   | S.index(sub[, start[, end]]) -> int  |
-| replace | S.replace(old, new)                  |
 | rfind   | S.rfind(sub[, start[, end]]) -> int  |
 | rindex  | S.rindex(sub[, start[, end]]) -> int |
 |        |  |
 
 | | Інші методи |
 |:----------------------------------------|:------------------------------------|
+| replace | S.replace(old, new)                  |
+| join        | Concatenate any number of strings.                                           |
+| zfill                | Pad a numeric string with zeros on the left, to fill a field of the given width. |
 | expandtabs | Return a copy where all tab characters are expanded using spaces.       |
 | format     | S.format(*args, **kwargs) -> str  |
 | format_map | S.format_map(mapping) -> str  |
@@ -519,6 +519,155 @@ Out[59]: ['FastEthernet0/0', '15.0.15.1', 'YES', 'manual', 'up', 'up']
 * метод ``format`` - відносно новий варіант
 * f-рядки – новий варіант, який з'явився у Python 3.6
 
+```python
+template = """
+IP: {}
+Mask: {}
+Broadcast: {}
+"""
+
+print(template.format(ip, mask, broadcast))
+print(template.format("10.1.1.1", 24, "10.1.1.255"))
+```
+
+```
+IP: 10.1.1.1
+Mask: 24
+Broadcast: 10.1.1.255
+```
+
+---
+## Форматування рядків з оператором `%`
+
+```python
+In [1]: ip = "10.1.1.1"
+
+In [2]: mask = 24
+
+In [5]: "IP: %s, mask: %d" % (ip, mask)
+Out[5]: 'IP: 10.1.1.1, mask: 24'
+```
+
+Можна зустріти в налаштуваннях logging:
+
+```python
+logging.basicConfig(
+    format='%(asctime)s %(clientip)-15s %(user)-8s %(message)s'
+)
+```
+
+---
+## Форматування рядків із методом format
+
+```python
+In [1]: ip = "10.1.1.1"
+
+In [2]: mask = 24
+
+In [4]: "IP: {}, mask: {}".format(ip, mask)
+Out[4]: 'IP: 10.1.1.1, mask: 24'
+
+In [5]: template = "IP: {}, mask: {}"
+
+In [6]: template.format(ip, mask)
+Out[6]: 'IP: 10.1.1.1, mask: 24'
+```
+
+---
+## Форматування рядків із методом format
+
+```python
+template = """
+IP: {}
+Mask: {}
+Broadcast: {}
+"""
+
+print(template.format(ip, mask, broadcast))
+print(template.format("10.1.1.1", 24, "10.1.1.255"))
+```
+
+```
+IP: 10.1.1.1
+Mask: 24
+Broadcast: 10.1.1.255
+```
+
+---
+## f-рядки
+
+```python
+In [1]: ip = "10.1.1.1"
+
+In [2]: mask = 24
+
+In [3]: f"IP: {ip}, mask: {mask}"
+Out[3]: 'IP: 10.1.1.1, mask: 24'
+```
+
+Порівняння з format:
+
+```python
+In [3]: f"IP: {ip}, mask: {mask}"
+Out[3]: 'IP: 10.1.1.1, mask: 24'
+
+In [4]: "IP: {}, mask: {}".format(ip, mask)
+Out[4]: 'IP: 10.1.1.1, mask: 24'
+```
+
+---
+## Jinja2
+
+```jinja
+hostname {{ name }}
+
+interface Loopback0
+ ip address 10.0.0.{{ id }} 255.255.255.255
+
+{% for vlan_id in vlans %}
+vlan {{ vlan_id }}
+{% endfor %}
+```
+
+
+```python
+from jinja2 import Environment, FileSystemLoader
+
+
+env = Environment(loader=FileSystemLoader("."))
+templ = env.get_template("cfg_template.txt")
+
+liverpool = {"id": "11", "name": "Liverpool", "vlans": [1, 2, 10, 30]}
+print(templ.render(liverpool))
+```
+
+
+---
+## Форматування рядків із методом format
+
+---
+## Форматування рядків із методом format
+
+`{}` вказує на те, що сюди підставиться значення, яке
+передається методу format. При цьому кожна пара фігурних дужок позначає одне
+місце для підстановки значення.
+
+```python
+template = """
+IP: {}
+Mask: {}
+Broadcast: {}
+"""
+
+print(template.format(ip, mask, broadcast))
+print(template.format("10.1.1.1", 24, "10.1.1.255"))
+```
+
+```
+IP: 10.1.1.1
+Mask: 24
+Broadcast: 10.1.1.255
+```
 
 ---
 ## Форматування рядків із методом format
@@ -528,9 +677,6 @@ In [1]: "interface FastEthernet0/{}".format('1')
 Out[1]: 'interface FastEthernet0/1'
 ```
 
-Спеціальний символ ``{}`` вказує на те, що сюди підставиться значення, яке
-передається методу format. При цьому кожна пара фігурних дужок позначає одне
-місце для підстановки значення.
 
 ---
 ## Форматування рядків
@@ -553,6 +699,7 @@ In [5]: print('{}'.format([10, 1, 1, 1]))
 форматуванні рядків можна вказувати, скільки символів виділено на дані. Якщо
 кількість символів у даних менша, ніж виділена кількість символів, відсутні
 символи заповнюються пробілами.
+
 ---
 ### Форматування рядків
 
@@ -722,9 +869,21 @@ regex = ('(\S+) +(\S+) +' # interface and IP
 * змінюваний упорядкований тип даних
 
 ```python
-In [1]: list1 = [10, 20, 30, 77]
-In [2]: list2 = ['one', 'dog', 'seven']
-In [3]: list3 = [1, 20, 4.0, 'word']
+vlans = [10, 20, 30, 77]
+words = ['one', 'dog', 'seven']
+commands = ["interface Gi0/1", "ip address 10.1.1.1 255.255.255.0"]
+items = [1, 20, 4.0, 'word']
+```
+
+---
+### Список
+
+```python
+interfaces = [
+    ['FastEthernet0/0', '15.0.15.1', 'YES', 'manual', 'up', 'up'],
+    ['FastEthernet0/1', '10.0.1.1', 'YES', 'manual', 'up', 'up'],
+    ['FastEthernet0/2', '10.0.2.1', 'YES', 'manual', 'up', 'down'],
+]
 ```
 
 ---
