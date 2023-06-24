@@ -1633,6 +1633,10 @@ TypeError: 'tuple' object does not support item assignment
 Множина в Python - це послідовність елементів у фігурних дужках, які розділені
 між собою комою.
 
+```python
+vlans = {10, 20, 30, 40, 100, 11}
+```
+
 ---
 ### Множина
 
@@ -1648,6 +1652,7 @@ In [3]: set1 = set(vlans)
 In [4]: print(set1)
 {40, 100, 10, 20, 30}
 ```
+
 ---
 ### Варіанти створення множин
 
@@ -1708,6 +1713,23 @@ Out[6]: {10, 20, 30}
 | issubset                      | Report whether another set contains this set. |
 | issuperset                    | Report whether this set contains another set. |
 
+---
+### Методи множин
+
+| Назва                      | Опис |
+|-------------------------------|--------------|
+| difference                    | Return the difference of two or more sets as a new set. |
+| intersection                  | Return the intersection of two sets as a new set. |
+| union                         | Return the union of sets as a new set. |
+| symmetric_difference          | Return the symmetric difference of two sets as a new set. |
+| | |
+| difference_update             | Remove all elements of another set from this set. |
+| intersection_update           | Update a set with the intersection of itself and another. |
+| symmetric_difference_update   | Update a set with the symmetric difference of itself and another. |
+| | |
+| isdisjoint                    | Return True if two sets have a null intersection. |
+| issubset                      | Report whether another set contains this set. |
+| issuperset                    | Report whether this set contains another set. |
 
 ---
 ### ```add()```
