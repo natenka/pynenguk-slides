@@ -1177,31 +1177,31 @@ In [5]: print(london)
 ### Словник
 
 ```python
-london_co = {
-    'r1' : {
-    'hostname': 'london_r1',
-    'location': '21 New Globe Walk',
-    'vendor': 'Cisco',
-    'model': '4451',
-    'ios': '15.4',
-    'ip': '10.255.0.1'
+london = {
+    "r1": {
+        "hostname": "london_r1",
+        "location": "21 New Globe Walk",
+        "vendor": "Cisco",
+        "model": "4451",
+        "ios": "15.4",
+        "ip": "10.255.0.1",
     },
-    'r2' : {
-    'hostname': 'london_r2',
-    'location': '21 New Globe Walk',
-    'vendor': 'Cisco',
-    'model': '4451',
-    'ios': '15.4',
-    'ip': '10.255.0.2'
+    "r2": {
+        "hostname": "london_r2",
+        "location": "21 New Globe Walk",
+        "vendor": "Cisco",
+        "model": "4451",
+        "ios": "15.4",
+        "ip": "10.255.0.2",
     },
-    'sw1' : {
-    'hostname': 'london_sw1',
-    'location': '21 New Globe Walk',
-    'vendor': 'Cisco',
-    'model': '3850',
-    'ios': '3.6.XE',
-    'ip': '10.255.0.101'
-    }
+    "sw1": {
+        "hostname": "london_sw1",
+        "location": "21 New Globe Walk",
+        "vendor": "Cisco",
+        "model": "3850",
+        "ios": "3.6.XE",
+        "ip": "10.255.0.101",
+    },
 }
 ```
 
@@ -1237,13 +1237,13 @@ Out[2]: ['location', 'name', 'vendor']
 |----------|-------------------------------------------|
 | get      | Return the value for key if key is in the dictionary, else default.
 | update   | Update D from dict/iterable E and F.
+| keys     | Return  a set-like object providing a view on D's keys
+| values   | Return an object providing a view on D's values
+| items    | Return a set-like object providing a view on D's items
 | pop      | remove specified key and return the corresponding value.
 |          | If key is not found, d is returned if given, otherwise KeyError is raised
 | popitem  | Remove and return a (key, value) pair as a 2-tuple.
 | setdefault | Insert key with a value of default if key is not in the dictionary.
-| keys     | Return  a set-like object providing a view on D's keys
-| values   | Return an object providing a view on D's values
-| items    | Return a set-like object providing a view on D's items
 | clear    | Remove all items from D.
 | copy     |  a shallow copy of D
 | fromkeys | Create a new dictionary with keys from iterable and values set to value.
@@ -1571,6 +1571,9 @@ Out[15]:
 * послідовність елементів у дужках, розділених комою
 * незмінний упорядкований тип даних
 
+```python
+params = ('hostname', 'location', 'vendor')
+```
 
 ---
 ### Кортеж
