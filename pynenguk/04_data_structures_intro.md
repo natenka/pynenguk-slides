@@ -93,6 +93,41 @@
 
 
 ---
+## Список
+
+```python
+interfaces = [
+    ['FastEthernet0/0', '15.0.15.1', 'YES', 'manual', 'up', 'up'],
+    ['FastEthernet0/1', '10.0.1.1', 'YES', 'manual', 'up', 'up'],
+    ['FastEthernet0/2', '10.0.2.1', 'YES', 'manual', 'up', 'down'],
+]
+
+interfaces = [
+    {'address': '192.168.100.1', 'intf': 'Ethernet0/0', 'protocol': 'up', 'status': 'up'},
+    {'address': '192.168.200.1', 'intf': 'Ethernet0/1', 'protocol': 'up', 'status': 'up'},
+]
+
+```
+
+---
+### Словник
+
+```python
+london = {
+    'id': 1,
+    'name': 'London',
+    'it_vlan': 320,
+    'user_vlan': 1010,
+    'mngmt_vlan': 99,
+    'to_name': None,
+    'to_id': None,
+    'routing': False,
+    'port': 'G1/0/11',
+}
+```
+
+
+---
 ## Змінні
 
 ---
