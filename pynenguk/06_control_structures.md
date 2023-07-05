@@ -40,20 +40,62 @@ else:
     ...
 ```
 
+---
+### if/elif/else
+
+```python
+if expression:
+    ...
+elif expression:
+    ...
+elif expression:
+    ...
+```
+
 
 ---
 ### if/elif/else
 
 ```python
-a = 9
-
-if a == 10:
-    print('a дорівнює 10')
-elif a < 10:
-    print('a менше 10')
-else:
-    print('a більше 10')
+if expression:
+    ...
+if expression:
+    ...
+if expression:
+    ...
 ```
+
+---
+### if/elif/else
+
+```python
+number = int(input("Enter number: "))
+
+if number == 10:
+    print('number дорівнює 10')
+elif numer < 10:
+    print('number менше 10')
+else:
+    print('number більше 10')
+```
+
+
+---
+### if/elif/else
+
+```python
+number = int(input("Enter number: "))
+
+if number == 10:
+    print('number дорівнює 10')
+elif numer < 10:
+    print('number менше 10')
+elif numer > 10:
+    print('number більше 10')
+else:
+    print("Кінець")
+```
+
 
 ---
 ### if/elif/else
@@ -82,13 +124,11 @@ Out[11]: False
 мають хибне або істинне значення:
 
 * істинне:
-
     * будь-яке ненульове число
     * будь-який непорожній рядок
     * будь-який непорожній об'єкт
 
 * хибне:
-
     * 0
     * None
     * порожній рядок
@@ -184,7 +224,7 @@ Out[17]: False
 ```
 
 ---
-### Операторы and, or, not
+### Оператори and, or
 
 ```python
 r1 = {
@@ -201,17 +241,8 @@ In [18]: vlan = [10, 20, 30, 40]
 In [19]: 'ios' in r1 and 10 in vlan
 Out[19]: True
 
-In [20]: '4451' in r1 and 10 in vlan
-Out[20]: False
-
 In [21]: '4451' in r1 or 10 in vlan
 Out[21]: True
-
-In [22]: not '4451' in r1
-Out[22]: True
-
-In [23]: '4451' not in r1
-Out[23]: True
 ```
 
 ---
@@ -248,6 +279,47 @@ In [30]: 'string1' or 'string2'
 Out[30]: 'string1'
 ```
 
+---
+### Логічні оператори and, or, not
+
+| Вираз | Результат
+|----------------|-----------|
+| True and True  | True |
+| True and False | False |
+| False and True | False | 
+| False and False | False |
+| | |
+| True or True | True |
+| True or False | True |
+| False or True | True |
+| False or False | False |
+| | |
+| not True | False |
+| not False | True |
+
+
+
+---
+### Логічні оператори and, or, not
+
+Логічні операції, упорядковані за зростанням пріоритету
+
+| Операція | Результат |
+|----------|-----------|
+| `a or b` | якщо a істинне, то a, інакше b |
+| `a and b`| якщо a хибне, то a, інакше b |
+| `not a`  | якщо a хибне, то True, інакше False |
+
+---
+### Логічні оператори and, or, not
+
+Логічні операції, упорядковані за зростанням пріоритету
+
+| Операція | Результат | Примітка |
+|----------|-----------|----------|
+| `a or b` | якщо a істинне, то a, інакше b | b обчислюється тільки якщо a хибне |
+| `a and b`| якщо a хибне, то a, інакше b | b обчислюється тільки якщо a істинне |
+| `not a`  | якщо a хибне, то True, інакше False |  |
 
 ---
 
