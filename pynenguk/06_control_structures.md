@@ -398,15 +398,16 @@ $ python check_password.py
 ---
 ### for
 
-Цикл for проходится по указанной последовательности и выполняет действия, которые указаны в блоке for.
+Цикл for перебирає елементи вказаної послідовності один за одним і
+виконує дії, вказані в блоці for для кожного елемента.
 
-Примеры последовательностей элементов, по которым может проходиться цикл for:
+Приклади послідовностей елементів, по яким цикл for може виконувати ітерацію:
 
-* строка
+* рядок
 * список
-* словарь
-* функция [range()](../10_useful_functions/range.md)
-* любой [итерируемый объект](../13_iterator_generator/iterable_and_iterator.md)
+* словник
+* range
+* будь-який ітерований об'єкт
 
 ---
 ### for
@@ -431,7 +432,6 @@ g
 ---
 ### for
 
-Пример цикла for с функцией range():
 
 ```python
 In [2]: for i in range(10):
@@ -452,14 +452,15 @@ interface FastEthernet0/9
 ---
 ### for
 
-В этом примере цикл проходит по списку VLANов, поэтому переменную можно назвать vlan:
+У цьому прикладі цикл проходить за списком VLAN, тому змінну можна назвати vlan:
 
 ```python
-In [3]: vlans = [10, 20, 30, 40, 100]
-In [4]: for vlan in vlans:
-   ...:     print('vlan {}'.format(vlan))
-   ...:     print(' name VLAN_{}'.format(vlan))
-   ...:     
+vlans = [10, 20, 30, 40, 100]
+for vlan in vlans:
+    print('vlan {}'.format(vlan))
+    print(' name VLAN_{}'.format(vlan))
+    
+
 vlan 10
  name VLAN_10
 vlan 20
@@ -475,16 +476,17 @@ vlan 100
 ---
 ### for
 
-Когда цикл идет по словарю, то фактически он проходится по ключам:
+Коли цикл for проходить через словник, він виконує ітерацію за ключами:
 
 ```python
-In [5]: r1 = {
- 'ios': '15.4',
- 'ip': '10.255.0.1',
- 'hostname': 'london_r1',
- 'location': '21 New Globe Walk',
- 'model': '4451',
- 'vendor': 'Cisco'}
+r1 = {
+    'ios': '15.4',
+    'ip': '10.255.0.1',
+    'hostname': 'london_r1',
+    'location': '21 New Globe Walk',
+    'model': '4451',
+    'vendor': 'Cisco',
+}
 
 In [6]: for k in r1:
    ....:     print(k)
@@ -500,7 +502,7 @@ model
 ---
 ### for
 
-Если необходимо выводить пары ключ-значение в цикле:
+Якщо потрібно вивести пари ключ-значення в циклі, можна зробити так:
 
 ```python
 In [7]: for key in r1:
@@ -517,7 +519,7 @@ model => 4451
 ---
 ### for
 
-В словаре есть специальный метод items, который позволяет проходится в цикле сразу по паре ключ:значение:
+Або скористатися методом items, який дозволяє отримати пару ключ-значення:
 
 ```python
 In [8]: for key, value in r1.items():
@@ -532,7 +534,7 @@ model => 4451
 ```
 
 ---
-### Вложенные for
+### Вкладені for
 
 ```python
 In [7]: commands = ['switchport mode access', 'spanning-tree portfast', 'spanning-tree bpduguard enable']
@@ -559,7 +561,7 @@ interface FastEthernet 0/4
 ```
 
 ---
-### Совмещение for и if
+### Комбінування for і if
 
 Файл generate_access_port_config.py:
 ```python
@@ -581,9 +583,8 @@ for intf, vlan in access.items():
 ```
 
 ---
-### Совмещение for и if
+### Комбінування for і if
 
-Результат выполнения скрипта:
 ```
 $ python generate_access_port_config.py
 interface FastEthernet0/12
