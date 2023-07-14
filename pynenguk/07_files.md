@@ -1,658 +1,245 @@
-# Python для сетевых инженеров 
-# Работа с файлами
+# Робота з файлами
 
 ---
-### Работа с файлами
+## Робота з файлами
 
-При работе с сетевым оборудованием (и не только), файлами могут быть:
-* конфигурации (простые, не структурированные текстовые файлы)
-* шаблоны конфигураций
-* файлы с параметрами подключений
-* другие скрипты Python
+При роботі з мережевим обладнанням (і не тільки) файлами можуть бути:
 
----
-### Работа с файлами
+* конфігурації (прості, не структуровані текстові файли) - робота з ними розглядається в цьому розділі
+* шаблони конфігурацій - зазвичай це якийсь спеціальний формат файлів
+* файли з параметрами підключень. Як правило, це структуровані файли, в певному форматі: YAML, JSON, CSV
 
-В работе с файлами есть несколько аспектов:
-* открытие/закрытие
-* чтение
-* запись
 
 ---
-### Открытие файлов
+### Робота з файлами
 
-Для открытия файлов, чаще всего, используется функция `open()`:
+У роботі з файлами є кілька аспектів:
+
+* відкриття/закриття
+* читання
+* запис
+
+---
+### Робота з файлами
+
+```
+R1#show ip interface brief
+Interface                  IP-Address      OK? Method Status           Protocol
+FastEthernet0/0            15.0.15.1       YES manual up               up
+FastEthernet0/1            10.0.12.1       YES manual up               up
+FastEthernet0/2            10.0.13.1       YES manual up               up
+FastEthernet0/3            unassigned      YES unset  up               down
+Loopback0                  10.1.1.1        YES manual up               up
+Loopback100                100.0.0.1       YES manual up               up
+```
+
+```
+Ethernet0/0 is up, line protocol is up
+  Internet address is 192.168.100.1/24
+  Broadcast address is 255.255.255.255
+  Address determined by non-volatile memory
+  MTU is 1500 bytes
+  Helper address is not set
+  ...
+Ethernet0/1 is up, line protocol is up
+  Internet address is 192.168.200.1/24
+  Broadcast address is 255.255.255.255
+  Address determined by non-volatile memory
+  MTU is 1500 bytes
+  Helper address is not set
+  ...
+Ethernet0/2 is up, line protocol is up
+  Internet address is 19.1.1.1/24
+  Broadcast address is 255.255.255.255
+  Address determined by non-volatile memory
+  MTU is 1500 bytes
+  Helper address is not set
+  ...
+```
+
+```
+Current configuration : 2033 bytes
+!
+! Last configuration change at 13:11:59 UTC Thu Feb 25 2016
+!
+version 15.0
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname sw1
+!
+!
+!
+interface FastEthernet0/0
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 100,200
+ switchport mode trunk
+!
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 20
+!         
+interface FastEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 100,300,400,500,600
+ switchport mode trunk
+!         
+interface FastEthernet1/0
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet1/1
+ switchport mode access
+ switchport access vlan 30
+!
+interface FastEthernet1/2
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 400,500,600
+ switchport mode trunk
+!
+interface Vlan100
+ ip address 10.0.100.1 255.255.255.0
+!
+!
+alias configure sh do sh 
+alias exec ospf sh run | s ^router ospf
+alias exec vc sh mpls l2tr vc
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input all
+!
+end
+```
+
+---
+## Відкриття файлів
+
+Для початку роботи з файлом його треба відкрити.
+
+Для відкриття файлів найчастіше використовується функція open:
+
 ```python
 file = open('file_name.txt', 'r')
 ```
 
-В функции open:
+У функції open:
 
-* `'file_name.txt'` - имя файла
-* `'r'` - режим открытия файла
+* `'file_name.txt'` - ім'я файлу. Тут можна вказувати ім'я файлу або шлях (абсолютний чи відносний)
+* `'r'` - режим відкриття файлу
 
 
 ---
-### Режимы открытия файлов:
+### Режими відкриття файлів
 
-* `r` - открыть файл только для чтения (значение по умолчанию)
-* `w` - открыть файл для записи
-  * если файл существует, то его содержимое удаляется
-  * если файл не существует, то создается новый
-* `a` - открыть файл для дополнения записи. Данные добавляются в конец файла
+| Символ | Значення |
+|--------|-----------|
+| `"r"` | відкритий для читання (за замовчуванням) |
+| `"w"` | відкрити для запису, спочатку видаливши вміст файлу |
+| `"x"` | відкрити для ексклюзивного створення, якщо файл уже існує, виникає виняток FileExistsError |
+| `"а"` | відкрити для запису, додаючи в кінець файлу, якщо він існує |
+| `"b"` | двійковий режим |
+| `"t"` | текстовий режим (за замовчуванням) |
+| `"+"` | відкритий для оновлення (читання та запис) |
 
 
-| Mode              | r |  r+ |  w |  w+ |  a |  a+ |
-|-------------------|---|-----|----|-----|----|-----|
-| read              | + |  +  |    |  +  |    |  +  |
-| write             |   |  +  |  + |  +  |  + |  +  |
-| write after seek  |   |  +  |  + |  +  |    |     |
-| create            |   |     |  + |  +  |  + |  +  |
-| truncate          |   |     |  + |  +  |    |     |
-| position at start | + |  +  |  + |  +  |    |     |
-| position at end   |   |     |    |     |  + |  +  |
-
----
-### Чтение файлов
-
-В Python есть несколько методов чтения файла:
-* ```read()``` - считывает содержимое файла в строку
-* ```readline()``` - считывает файл построчно
-* ```readlines()``` - считывает строки файла и создает список из строк
+Python розрізняє двійковий і текстовий ввід-вивід.  Файли, відкриті в
+двійковому режимі (із буквою `b` в аргументі mode), повертають вміст як об'єкти
+байти (bytes) без будь-якого декодування. У текстовому режимі (за
+замовчуванням, або коли `t` включено в аргумент режиму), вміст файлу
+повертається як рядок, відповідно байти були спочатку декодовані з
+використанням кодування.
 
 ---
-### Конструкция with
+### Режими відкриття файлів
 
-Конструкция with называется менеджер контекста.
+* `r` - відкрити файл тільки для читання (за замовчуванням)
+* `w` - відкрити файл для запису
+    * якщо файл існує, його вміст видаляється
+    * якщо файл не існує, то створюється новий
+* `x` – відкрити файл для ексклюзивного створення:
+    * якщо файл існує, запис не відбувається
+    * якщо файл не існує, то створюється новий
+* `a` – відкрити файл для доповнення запису. Дані додаються до кінця файлу
 
-В Python существует более удобный способ работы с файлами, чем те, которые использовались до сих пор - конструкция ```with```:
-```python
-with open('r1.txt', 'r') as f:
-    for line in f:
-        print(line.rstrip())
 
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
+---
+### Режими відкриття файлів
+
+| Режим відкриття            | r | r+ | w | w+ | a | a+ | x | x+ |
+|----------------------------|---|----|---|----|---|----|---|----|
+| читання                    | + | +  |   | +  |   | +  |   | +  |
+| запис                      |   | +  | + | +  | + | +  | + | +  |
+| створення нового файлу     |   |    | + | +  | + | +  | + | +  |
+| відкриття існуючого файлу  |   |    | + | +  | + | +  |   |    |
+| вміст файлу видаляється    |   |    | + | +  |   |    |   |    |
+| позиція на початку         | + | +  | + | +  |   |    | + | +  |
+| позиція в кінці            |   |    |   |    | + | +  |   |    |
+| запис після seek           |   | +  | + | +  |   |    | + | +  |
+
+```
+| Режим відкриття            | r | r+ | w | w+ | a | a+ | x | x+ |
+|----------------------------|---|----|---|----|---|----|---|----|
+| читання                    | + | +  |   | +  |   | +  |   | +  |
+| запис                      |   | +  | + | +  | + | +  | + | +  |
+| створення нового файлу     |   |    | + | +  | + | +  | + | +  |
+| відкриття існуючого файлу  |   |    | + | +  | + | +  |   |    |
+| вміст файлу видаляється    |   |    | + | +  |   |    |   |    |
+| позиція на початку         | + | +  | + | +  |   |    | + | +  |
+| позиція в кінці            |   |    |   |    | + | +  |   |    |
+| запис після seek           |   | +  | + | +  |   |    | + | +  |
 ```
 
 ---
-### Запись файлов
+## Читання файлів
 
-При записи, очень важно определиться с режимом открытия файла, чтобы случайно его не удалить:
-* `w` - открыть файл для записи. Если файл существует, то его содержимое удаляется
-* `a` - открыть файл для дополнения записи. Данные добавляются в конец файла
+У Python є кілька варіантів читання файлу:
 
-При этом, оба режима создают файл, если он не существует
-
-Для записи в файл используются такие методы:
-
-* `write()` - записать в файл одну строку
-* `writelines()` - позволяет передавать в качестве аргумента список строк
+* перебирати файл у циклі for
+* метод `read` - зчитує вміст файлу в рядок
+* метод `readline` - зчитує один рядок
+* метод `readlines` - зчитує рядки файлу та створює список із рядків
 
 ---
-### ```read()```
+## Блок with
 
-Метод ```read()``` - считывает весь файл в одну строку.
+У Python існує більш зручний спосіб роботи з файлами, ніж ті, які
+використовувалися досі - конструкція with.  Конструкція with називається
+менеджер контексту.
 
-Пример использования метода ```read()```:
-```python
-In [1]: f = open('r1.txt')
 
-In [2]: f.read()
-Out[2]: '!\nservice timestamps debug datetime msec localtime show-timezone year\nservice timestamps log datetime msec localtime show-timezone year\nservice password-encryption\nservice sequence-numbers\n!\nno ip domain lookup\n!\nip ssh version 2\n!\n'
-
-In [3]: f.read()
-Out[3]: ''
-```
-
----
-### ```read()```
-
-При повторном чтении файла в 3 строке, отображается пустая строка.
-Так происходит из-за того, что при вызове метода ```read()```, считывается весь файл. 
-И после того, как файл был считан, курсор остается в конце файла.
-Управлять положением курсора можно с помощью метода ```seek()```.
-
----
-### ```readline()```
-
-Построчно файл можно считать с помощью метода ```readline()```:
-```python
-In [4]: f = open('r1.txt')
-
-In [5]: f.readline()
-Out[5]: '!\n'
-
-In [6]: f.readline()
-Out[6]: 'service timestamps debug datetime msec localtime show-timezone year\n'
-```
-
----
-### ```readline()```
-
-Но, чаще всего, проще пройтись по объекту file в цикле, не используя методы ```read...```:
-```python
-In [7]: f = open('r1.txt')
-
-In [8]: for line in f:
-   ...:     print(line)
-   ...:
-!
-
-service timestamps debug datetime msec localtime show-timezone year
-
-service timestamps log datetime msec localtime show-timezone year
-
-service password-encryption
-
-service sequence-numbers
-
-!
-
-no ip domain lookup
-
-!
-
-ip ssh version 2
-
-!
-
-```
-
----
-### ```readlines()```
-
-Еще один полезный метод - ```readlines()```. Он считывает строки файла в список:
-```python
-In [9]: f = open('r1.txt')
-
-In [10]: f.readlines()
-Out[10]:
-['!\n',
- 'service timestamps debug datetime msec localtime show-timezone year\n',
- 'service timestamps log datetime msec localtime show-timezone year\n',
- 'service password-encryption\n',
- 'service sequence-numbers\n',
- '!\n',
- 'no ip domain lookup\n',
- '!\n',
- 'ip ssh version 2\n',
- '!\n']
-```
-
----
-### ```readlines()```
-
-Если нужно получить строки файла, но без перевода строки в конце, можно воспользоваться методом ```split``` и как разделитель, указать символ ```\n```:
-```
-In [11]: f = open('r1.txt')
-
-In [12]: f.read().split('\n')
-Out[12]:
-['!',
- 'service timestamps debug datetime msec localtime show-timezone year',
- 'service timestamps log datetime msec localtime show-timezone year',
- 'service password-encryption',
- 'service sequence-numbers',
- '!',
- 'no ip domain lookup',
- '!',
- 'ip ssh version 2',
- '!',
- '']
-```
-
----
-### ```readlines()```
-
-Если перед выполнением ```split()```, воспользоваться методом ```rstrip()```, список будет без пустой строки в конце:
-```python
-In [13]: f = open('r1.txt')
-
-In [14]: f.read().rstrip().split('\n')
-Out[14]:
-['!',
- 'service timestamps debug datetime msec localtime show-timezone year',
- 'service timestamps log datetime msec localtime show-timezone year',
- 'service password-encryption',
- 'service sequence-numbers',
- '!',
- 'no ip domain lookup',
- '!',
- 'ip ssh version 2',
- '!']
-```
-
----
-### ```seek()```
-
-До сих пор, файл каждый раз приходилось открывать заново, чтобы снова его считать.
-Так происходит из-за того, что после методов чтения, курсор находится в конце файла.
-И повторное чтение возвращает пустую строку.
-
-Чтобы ещё раз считать информацию из файла, нужно воспользоваться методом ```seek```, который перемещает курсор в необходимое положение.
-
----
-### ```seek()```
-
-Пример открытия файла и считывания содержимого:
-```python
-In [15]: f = open('r1.txt')
-
-In [16]: print(f.read())
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
-```
-
----
-### ```seek()```
-
-Если вызывать ещё раз метод ```read```, возвращается пустая строка:
-```python
-In [17]: print(f.read())
-```
-
-Но, с помощью метода ```seek```, можно перейти в начало файла (0 означает начало файла):
-```python
-In [18]: f.seek(0)
-```
-
----
-### ```seek()```
-
-После того, как, с помощью ```seek```, курсор был переведен в начало файла, можно опять считывать содержимое:
-```python
-In [19]: print(f.read())
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
-```
-
----
-## Запись файлов
-
----
-### Запись файлов
-
-При записи, очень важно определиться с режимом открытия файла, чтобы случайно его не удалить:
-* `w` - открыть файл для записи. Если файл существует, то его содержимое удаляется
-* `a` - открыть файл для дополнения записи. Данные добавляются в конец файла
-
-При этом, оба режима создают файл, если он не существует
-
-Для записи в файл используются такие методы:
-
-* `write()` - записать в файл одну строку
-* `writelines()` - позволяет передавать в качестве аргумента список строк
-
----
-### `write()`
-
-```python
-In [1]: cfg_lines = ['!',
-   ...:  'service timestamps debug datetime msec localtime show-timezone year',
-   ...:  'service timestamps log datetime msec localtime show-timezone year',
-   ...:  'service password-encryption',
-   ...:  'service sequence-numbers',
-   ...:  '!',
-   ...:  'no ip domain lookup',
-   ...:  '!',
-   ...:  'ip ssh version 2',
-   ...:  '!']
-```
-
----
-### `write()`
-
-Открытие файла r2.txt в режиме для записи:
-
-```python
-In [2]: f = open('r2.txt', 'w')
-```
-
----
-### `write()`
-
-Преобразуем список команд в одну большую строку с помощью `join`:
-
-```python
-In [3]: cfg_lines_as_string = '\n'.join(cfg_lines)
-
-In [4]: cfg_lines_as_string
-Out[4]: '!\nservice timestamps debug datetime msec localtime show-timezone year\nservice timestamps log datetime msec localtime show-timezone year\nservice password-encryption\nservice sequence-numbers\n!\nno ip domain lookup\n!\nip ssh version 2\n!'
-```
-
----
-### `write()`
-
-Запись строки в файл:
-
-```python
-In [5]: f.write(cfg_lines_as_string)
-```
-
-Аналогично можно добавить строку вручную:
-
-```python
-In [6]: f.write('\nhostname r2')
-```
-
----
-### `write()`
-
-После завершения работы с файлом, его необходимо закрыть:
-
-```python
-In [7]: f.close()
-```
-
----
-### `writelines()`
-
-Метод `writelines()` ожидает список строк, как аргумент.
-```python
-In [1]: cfg_lines = ['!',
-   ...:  'service timestamps debug datetime msec localtime show-timezone year',
-   ...:  'service timestamps log datetime msec localtime show-timezone year',
-   ...:  'service password-encryption',
-   ...:  'service sequence-numbers',
-   ...:  '!',
-   ...:  'no ip domain lookup',
-   ...:  '!',
-   ...:  'ip ssh version 2',
-   ...:  '!']
-
-In [9]: f = open('r2.txt', 'w')
-
-In [10]: f.writelines(cfg_lines)
-
-In [11]: f.close()
-
-In [12]: cat r2.txt
-!service timestamps debug datetime msec localtime show-timezone yearservice timestamps log datetime msec localtime show-timezone yearservice password-encryptionservice sequence-numbers!no ip domain lookup!ip ssh version 2!
-```
-
----
-### `writelines()`
-
-Добавить перевод строки: 
-```python
-In [13]: cfg_lines2 = []
-
-In [14]: for line in cfg_lines:
-   ....:     cfg_lines2.append( line + '\n' )
-   ....:
-
-In [15]: cfg_lines2
-Out[15]:
-['!\n',
- 'service timestamps debug datetime msec localtime show-timezone year\n',
- 'service timestamps log datetime msec localtime show-timezone year\n',
- 'service password-encryption\n',
- 'service sequence-numbers\n',
- '!\n',
- 'no ip domain lookup\n',
- '!\n',
- 'ip ssh version 2\n',
-```
-
----
-### `writelines()`
-
-Вариант с list comprehensions:
-```python
-In [16]: cfg_lines3 = [ line + '\n' for line in cfg_lines ]
-
-In [17]: cfg_lines3
-Out[17]:
-['!\n',
- 'service timestamps debug datetime msec localtime show-timezone year\n',
- 'service timestamps log datetime msec localtime show-timezone year\n',
- 'service password-encryption\n',
- 'service sequence-numbers\n',
- '!\n',
- 'no ip domain lookup\n',
- '!\n',
- 'ip ssh version 2\n',
- '!\n']
-```
-
----
-### `writelines()`
-
-Если любой, из получившихся списков записать заново в файл, то в нем уже будут переводы строк:
-
-```python
-In [18]: f = open('r2.txt', 'w')
-
-In [19]: f.writelines(cfg_lines3)
-
-In [20]: f.close()
-
-In [21]: cat r2.txt
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
-```
-
----
-## Закрытие файлов
-
----
-### Закрытие файлов
-
-После завершения работы с файлом, его нужно закрыть.  
-В некоторых случаях, Python может самостоятельно закрыть файл.  
-Но лучше на это не рассчитывать и закрывать файл явно.
-
----
-### `close()`
-
-```python
-In [1]: f = open('r1.txt', 'r')
-
-In [2]: print(f.read())
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
-```
-
----
-### `close()`
-
-У объекта file есть специальный атрибут `closed`, который позволяет проверить закрыт файл или нет.  
-Если файл открыт, он возвращает `False`:
-
-```python
-In [3]: f.closed
-Out[3]: False
-```
-
-Теперь закрываем файл и снова проверяем `closed`:
-
-```python
-In [4]: f.close()
-
-In [5]: f.closed
-Out[5]: True
-```
-
----
-### `close()`
-
-Если попробовать прочитать файл, возникнет исключение:
-
-```python
-In [6]: print(f.read())
-------------------------------------------------------------------
-ValueError                       Traceback (most recent call last)
-<ipython-input-53-2c962247edc5> in <module>()
-----> 1 print(f.read())
-
-ValueError: I/O operation on closed file
-```
-
-
----
-## Конструкция with
-
----
-### Конструкция with
-
-Конструкция with называется менеджер контекста.
-
-В Python существует более удобный способ работы с файлами, чем те, которые использовались до сих пор - конструкция ```with```:
 ```python
 with open('r1.txt', 'r') as f:
     for line in f:
         print(line)
-
-!
-
-service timestamps debug datetime msec localtime show-timezone year
-
-service timestamps log datetime msec localtime show-timezone year
-
-service password-encryption
-
-service sequence-numbers
-
-!
-
-no ip domain lookup
-
-!
-
-ip ssh version 2
-
-!
 ```
-
----
-### Конструкция with
-
-Кроме того, конструкция ```with``` гарантирует закрытие файла автоматически.
-
-Обратите внимание на то, как считываются строки файла:
-```python
-for line in f:
-    print(line)
-```
-
-Когда с файлом нужно работать построчно, лучше использовать такой вариант.
 
 
 ---
-### Конструкция with
+## Запис файлів
 
-```python
-with open('r1.txt', 'r') as f:
-    for line in f:
-        print(line.rstrip())
+При записі в файл дуже важливо визначитися з режимом відкриття файлу, щоб
+випадково не видалити вміст файлу:
 
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
+* `w` - відкрити файл для запису. Якщо файл існує, то його вміст видаляється
+* `a` - відкрити файл для доповнення запису. Дані додаються в кінці файлу
+* `x` - відкрити файл для запису. Якщо файл існує, запис не виконується
 
-In [3]: f.closed
-Out[3]: True
+Всі режими створюють файл, якщо він не існує.
 
-```
+Для запису в файл використовуються такі методи:
 
----
-### Конструкция with
-
-И, конечно же, с конструкцией ```with``` можно использовать не только такой построчный вариант считывания, все методы, которые рассматривались до этого, также работают:
-```python
-with open('r1.txt', 'r') as f:
-    print(f.read())
-
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
-```
-
----
-### Открытие двух файлов
-
-В таком случае, в блоке with можно открывать два файла таким образом:
-```python
-with open('r1.txt') as src, open('result.txt', 'w') as dest:
-    for line in src:
-        if line.startswith('service'):
-            dest.write(line)
-
-
-In [6]: cat result.txt
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-
-```
-
----
-### Открытие двух файлов
-
-Это равнозначно таким двум блокам with:
-```python
-with open('r1.txt') as src:
-    with open('result.txt', 'w') as dest:
-        for line in src:
-            if line.startswith('service'):
-                dest.write(line)
-
-
-```
+* write - записати один рядок у файл
+* writelines - дозволяє передавати список рядків як аргумент
+При записи, очень важно определиться с режимом открытия файла, чтобы случайно его не удалить:
 
