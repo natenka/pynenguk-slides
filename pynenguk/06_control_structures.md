@@ -916,6 +916,67 @@ You can't divide by zero
 ```
 
 ---
+## try/except/else/finally
+
+```python
+num1 = input("Введіть перше число: ")
+num2 = input("Введіть друге число: ")
+
+try:
+    result = int(num1)/int(num2)
+except (ValueError, ZeroDivisionError):
+    print("Щось пішло не так...")
+else:
+    print("Результат: ", result**2)
+finally:
+    print("The End")
+```
+
+---
+## try/except/else/finally
+
+```python
+num1 = input("Введіть перше число: ")
+num2 = input("Введіть друге число: ")
+
+try:
+    result = int(num1)/int(num2)
+except (ValueError, ZeroDivisionError):
+    print("Щось пішло не так...")
+```
+
+```python
+try:
+    result = int(num1)/int(num2)
+except ValueError:
+    print("Вводьте лише числа")
+except ZeroDivisionError:
+    print("На нуль ділити не можна")
+```
+
+
+```python
+try:
+    result = int(num1)/int(num2)
+except (ValueError, ZeroDivisionError):
+    print("Щось пішло не так...")
+else:
+    print("Результат: ", result**2)
+```
+
+```python
+try:
+    result = int(num1)/int(num2)
+except (ValueError, ZeroDivisionError):
+    print("Щось пішло не так...")
+else:
+    print("Результат: ", result**2)
+finally:
+    print("The End")
+```
+
+
+---
 ### Конструкція try працює таким чином
 
 * спочатку виконуються вирази, які записані в блоці try

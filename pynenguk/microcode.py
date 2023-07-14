@@ -1,32 +1,45 @@
 text = """
-### Оператори and, or, not
+## try/except/else/finally
 
 ```python
-r1 = {
-    'ios': '15.4',
-    'ip': '10.255.0.1',
-    'hostname': 'london_r1',
-    'location': '21 New Globe Walk',
-    'model': '4451',
-    'vendor': 'Cisco'
-}
-vlan = [10, 20, 30, 40]
+num1 = input("Введіть перше число: ")
+num2 = input("Введіть друге число: ")
 
-
-In [19]: 'ios' in r1 and 10 in vlan
-Out[19]: True
-
-In [20]: '4451' in r1 and 10 in vlan
-Out[20]: False
-
-In [21]: '4451' in r1 or 10 in vlan
-Out[21]: True
-
-In [23]: '4451' not in r1
-Out[23]: True
-
+try:
+    result = int(num1)/int(num2)
+except (ValueError, ZeroDivisionError):
+    print("Щось пішло не так...")
 ```
 
+```python
+try:
+    result = int(num1)/int(num2)
+except ValueError:
+    print("Вводьте лише числа")
+except ZeroDivisionError:
+    print("На нуль ділити не можна")
+```
+
+
+```python
+try:
+    result = int(num1)/int(num2)
+except (ValueError, ZeroDivisionError):
+    print("Щось пішло не так...")
+else:
+    print("Результат: ", result**2)
+```
+
+```python
+try:
+    result = int(num1)/int(num2)
+except (ValueError, ZeroDivisionError):
+    print("Щось пішло не так...")
+else:
+    print("Результат: ", result**2)
+finally:
+    print("The End")
+```
 """
 from rich.console import Console
 from rich.markdown import Markdown
