@@ -1,12 +1,12 @@
-## Отладка кода (debug)
+## Налагодження програм (debug)
 
 
 ---
-### Инструменты отладки
+### Інструменти налагодження коду
 
 * pythontutor
 * print, pprint
-* ``print(f"{value=}")``
+* print(f"{value=}")
 * rich.print
 * rich.inspect
 * rich.traceback
