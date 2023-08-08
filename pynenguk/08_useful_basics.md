@@ -365,38 +365,60 @@ In [56]: for vlan, mac, _, intf in table:
 ```
 
 ---
-## List, dict, set comprehensions
+## Спискові, словникові, множинні вирази
 
 ---
-### List, dict, set comprehensions
+## Спискові, словникові, множинні вирази
 
-Python поддерживает специальные выражения, которые позволяют компактно создавать списки, словари и множества.
+Python підтримує спеціальні вирази, які дозволяють компактно створювати списки,
+словники та множини.
 
 ```python
-[int(vl) for vl in items]
-{int(vlan) for vlan in vlans}
+[int(vl) for vl in vlans]
+{int(vl) for vl in vlans}
 {key.lower(): value for key, value in r1.items()}
 ```
 
-На английском эти выражения называются, соответственно:
 
-* List comprehensions
-* Dict comprehensions
-* Set comprehensions
+Англійською ці вирази називаються, відповідно:
 
-Эти выражения не только позволяют более компактно создавать соответствующие объекты, но и создают их быстрее.
-И хотя поначалу они требуют определенной привычки использования и понимания, они очень часто используются.
+-  List comprehensions (спискові вирази)
+-  Dict comprehensions (словникові вирази)
+-  Set comprehensions (множинні вирази)
+
+Ці вирази не тільки дозволяють компактніше створювати відповідні об'єкти, але й
+створюють їх швидше. І хоча спочатку вони вимагають певної звички використання
+та розуміння, вони часто використовуються.
 
 ---
-### List comprehensions (генераторы списков)
+## Синтаксис
 
-Генератор списка - это выражение, которое преобразует итерируемый объект в список.
+Синтаксис спискового виразу (синтаксис словникових та множинних виразів
+відрізняється тільки дужками):
 
 ```python
-vlans = [int(vl) for vl in items]
+[expression for item1 in iterable1 if condition1
+            for item2 in iterable2 if condition2
+            ...
+            for itemN in iterableN if conditionN]
 ```
 
-List comp выше аналогичен такой цикл:
+В найпростішому варіанті (один цикл без умови)
+
+```python
+[expression for item in iterable]
+```
+
+Цикл з умовою:
+
+```python
+[expression for item in iterable if condition]
+```
+
+---
+## Спискові вирази (list comprehensions)
+
+Списковий вираз дозволяє записати код:
 
 ```python
 items = ["10", "20", "30", "1", "11", "100"]
@@ -404,70 +426,73 @@ items = ["10", "20", "30", "1", "11", "100"]
 vlans = []
 for vl in items:
     vlans.append(int(vl))
+```
 
-print(vlans)
-# [10, 20, 30, 1, 11, 100]
+Таким списковим виразом:
+
+```python
+items = ["10", "20", "30", "1", "11", "100"]
+vlans = [int(vl) for vl in items]
+```
+
+Результат буде однаковим, список vlans:
+
+```python
+[10, 20, 30, 1, 11, 100]
 ```
 
 ---
-### List comprehensions (генераторы списков)
+## Спискові вирази (list comprehensions)
 
-В list comprehensions можно использовать выражение if.
-Таким образом можно добавлять в список только некоторые объекты.
+У спискових виразах можна використовувати умови if. Таким чином можна додавати
+до списку лише деякі елементи з ітерованого об'єкту.
 
-Например, такой цикл отбирает те элементы, которые являются числами, конвертирует их и добавляет в итоговый список only_digits:
 ```python
 items = ['10', '20', 'a', '30', 'b', '40']
+
 only_digits = []
 
 for item in items:
     if item.isdigit():
         only_digits.append(int(item))
-
-In [9]: print(only_digits)
-[10, 20, 30, 40]
 ```
 
----
-### List comprehensions (генераторы списков)
+Аналогічний варіант як списковий вираз:
 
-Аналогичный вариант в виде list comprehensions:
 ```python
 items = ['10', '20', 'a', '30', 'b', '40']
 only_digits = [int(item) for item in items if item.isdigit()]
-
-In [12]: print(only_digits)
-[10, 20, 30, 40]
-
 ```
 
-Конечно, далеко не все циклы можно переписать как генератор списка, но когда это можно сделать, и при этом выражение не усложняется, лучше использовать генераторы списка.
+Результат
+```python
+[10, 20, 30, 40]
+```
+
 
 
 ---
-### List comprehensions (генераторы списков)
+## Спискові вирази (list comprehensions)
 
-С помощью генератора списка также удобно получать элементы из вложенных словарей:
+Приклад використання спискового виразу для отримання значень із вкладених словників:
+
 ```python
 london_co = {
-    'r1': {'hostname': 'london_r1',
-           'ios': '15.4',
-           'ip': '10.255.0.1',
-           'location': '21 New Globe Walk',
-           'model': '4451',
-           'vendor': 'Cisco'},
-    'r2': {'hostname': 'london_r2',
-           'ios': '15.4',
-           'ip': '10.255.0.2',
-           'location': '21 New Globe Walk',
-           'model': '4451',
-           'vendor': 'Cisco'},
-    'sw1': {'hostname': 'london_sw1',
-            'ios': '3.6.XE',
-            'ip': '10.255.0.101',
-            'location': '21 New Globe Walk',
-            'model': '3850',
-            'vendor': 'Cisco'},
+    "r1": {
+        "hostname": "london_r1",
+        "ios": "15.4",
+        "ip": "10.255.0.1",
+    },
+    "r2": {
+        "hostname": "london_r2",
+        "ios": "15.4",
+        "ip": "10.255.0.2",
+    },
+    "sw1": {
+        "hostname": "london_sw1",
+        "ios": "3.6.XE",
+        "ip": "10.255.0.101",
+    },
 }
 
 In [14]: [london_co[device]['ios'] for device in london_co]
@@ -475,81 +500,41 @@ Out[14]: ['15.4', '15.4', '3.6.XE']
 
 In [15]: [london_co[device]['ip'] for device in london_co]
 Out[15]: ['10.255.0.1', '10.255.0.2', '10.255.0.101']
-
 ```
 
 ---
-### List comprehensions (генераторы списков)
+## Спискові вирази (list comprehensions)
 
-Полный синтаксис генератора списка выглядит так:
-```python
-[expression for item1 in iterable1 if condition1 
-            for item2 in iterable2 if condition2
-            ...
-            for itemN in iterableN if conditionN ]
-```
+У списковому виразі можна використовувати кілька for.
+Наприклад, у списку vlans є кілька вкладених списків з VLAN'ами:
 
-Это значит, можно использовать несколько for в выражении.
-
----
-### List comprehensions (генераторы списков)
-
-Например, в списке vlans находятся несколько вложенных списков с VLAN'ами:
 ```python
 vlans = [[10, 21, 35], [101, 115, 150], [111, 40, 50]]
 ```
 
----
-### List comprehensions (генераторы списков)
+З цього списку потрібно сформувати один плоский список із номерами VLAN. Перший
+варіант із циклами for:
 
-Из этого списка надо сформировать один плоский список с номерами VLAN.
-Первый вариант, с помощью циклов for:
-```
-vlans = [[10, 21, 35], [101, 115, 150], [111, 40, 50]]
+```python
 result = []
 
 for vlan_list in vlans:
     for vlan in vlan_list:
         result.append(vlan)
-
-In [19]: print(result)
-[10, 21, 35, 101, 115, 150, 111, 40, 50]
 ```
 
----
-### List comprehensions (генераторы списков)
+Аналогічний варіант із списковим виразом:
 
-Аналогичный вариант с генератором списков:
 ```python
-vlans = [[10, 21, 35], [101, 115, 150], [111, 40, 50]]
 result = [vlan for vlan_list in vlans for vlan in vlan_list]
+```
 
-In [22]: print(result)
+Результат:
+
+```python
 [10, 21, 35, 101, 115, 150, 111, 40, 50]
 ```
 
----
-### List comprehensions (генераторы списков)
-
-Можно одновременно проходиться по двум последовательностям, используя zip:
-```python
-In [23]: vlans = [100, 110, 150, 200]
-
-In [24]: names = ['mngmt', 'voice', 'video', 'dmz']
-
-In [25]: result = ['vlan {}\n name {}'.format(vlan, name) for vlan, name in zip(vlans, names)]
-
-In [26]: print('\n'.join(result))
-vlan 100
- name mngmt
-vlan 110
- name voice
-vlan 150
- name video
-vlan 200
- name dmz
-
-```
 
 ---
 ## Dict comprehensions (генераторы словарей)
