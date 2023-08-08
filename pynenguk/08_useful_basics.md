@@ -223,146 +223,6 @@ In [38]: r_intf
 Out[38]: '0/1'
 ```
 
----
-### Примеры распаковки
-
----
-### Распаковка итерируемых объектов
-
-Эти примеры показывают, что распаковывать можно не только списки, кортежи и строки, но и любой другой итерируемый объект.
-
-Распаковка range:
-```python
-In [39]: first, *rest = range(1,6)
-
-In [40]: first
-Out[40]: 1
-
-In [41]: rest
-Out[41]: [2, 3, 4, 5]
-```
-
----
-### Распаковка итерируемых объектов
-
-Распаковка zip:
-```python
-In [42]: a = [1, 2, 3, 4, 5]
-
-In [43]: b = [100, 200, 300, 400, 500]
-
-In [45]: list(zip(a, b))
-Out[45]: [(1, 100), (2, 200), (3, 300), (4, 400), (5, 500)]
-
-In [46]: first, *rest, last = zip(a, b)
-
-In [47]: first
-Out[47]: (1, 100)
-
-In [48]: rest
-Out[48]: [(2, 200), (3, 300), (4, 400)]
-
-In [49]: last
-Out[49]: (5, 500)
-```
-
----
-### Пример распаковки в цикле for
-
-Пример цикла, который проходится по ключам:
-```python
-access_template = ['switchport mode access',
-                   'switchport access vlan',
-                   'spanning-tree portfast',
-                   'spanning-tree bpduguard enable']
-access = {'0/12':10, '0/14':11, '0/16':17}
-
-In [52]: for intf in access:
-    ...:     print('interface FastEthernet' + intf)
-    ...:     for command in access_template:
-    ...:         if command.endswith('access vlan'):
-    ...:             print(' {} {}'.format(command, access[intf]))
-    ...:         else:
-    ...:             print(' {}'.format(command))
-    ...:
-interface FastEthernet0/12
- switchport mode access
- switchport access vlan 10
- spanning-tree portfast
- spanning-tree bpduguard enable
-interface FastEthernet0/14
- switchport mode access
- switchport access vlan 11
- spanning-tree portfast
- spanning-tree bpduguard enable
-interface FastEthernet0/16
- switchport mode access
- switchport access vlan 17
- spanning-tree portfast
- spanning-tree bpduguard enable
-
-```
-
----
-### Распаковка итерируемых объектов
-
-Вместо этого можно проходиться по парам ключ-значение и сразу же распаковывать их в разные переменные:
-```python
-for intf, vlan in access.items():
-    print('interface FastEthernet' + intf)
-    for command in access_template:
-        if command.endswith('access vlan'):
-            print(' {} {}'.format(command, vlan))
-        else:
-            print(' {}'.format(command))
-
-```
-
----
-### Распаковка итерируемых объектов
-
-Пример распаковки элементов списка в цикле:
-```python
-In [54]: table
-Out[54]:
-[['100', 'a1b2.ac10.7000', 'DYNAMIC', 'Gi0/1'],
- ['200', 'a0d4.cb20.7000', 'DYNAMIC', 'Gi0/2'],
- ['300', 'acb4.cd30.7000', 'DYNAMIC', 'Gi0/3'],
- ['100', 'a2bb.ec40.7000', 'DYNAMIC', 'Gi0/4'],
- ['500', 'aa4b.c550.7000', 'DYNAMIC', 'Gi0/5'],
- ['200', 'a1bb.1c60.7000', 'DYNAMIC', 'Gi0/6'],
- ['300', 'aa0b.cc70.7000', 'DYNAMIC', 'Gi0/7']]
-
-
-In [55]: for line in table:
-    ...:     vlan, mac, _, intf = line
-    ...:     print(vlan, mac, intf)
-    ...:
-100 a1b2.ac10.7000 Gi0/1
-200 a0d4.cb20.7000 Gi0/2
-300 acb4.cd30.7000 Gi0/3
-100 a2bb.ec40.7000 Gi0/4
-500 aa4b.c550.7000 Gi0/5
-200 a1bb.1c60.7000 Gi0/6
-300 aa0b.cc70.7000 Gi0/7
-```
-
----
-### Распаковка итерируемых объектов
-
-Но еще лучше сделать так:
-```python
-In [56]: for vlan, mac, _, intf in table:
-    ...:     print(vlan, mac, intf)
-    ...:
-100 a1b2.ac10.7000 Gi0/1
-200 a0d4.cb20.7000 Gi0/2
-300 acb4.cd30.7000 Gi0/3
-100 a2bb.ec40.7000 Gi0/4
-500 aa4b.c550.7000 Gi0/5
-200 a1bb.1c60.7000 Gi0/6
-300 aa0b.cc70.7000 Gi0/7
-```
 
 ---
 ## Спискові, словникові, множинні вирази
@@ -446,10 +306,11 @@ vlans = [int(vl) for vl in items]
 
 У спискових виразах можна використовувати умови if. Таким чином можна додавати
 до списку лише деякі елементи з ітерованого об'єкту.
-
 ```python
 items = ['10', '20', 'a', '30', 'b', '40']
+```
 
+```python
 only_digits = []
 
 for item in items:
@@ -460,7 +321,6 @@ for item in items:
 Аналогічний варіант як списковий вираз:
 
 ```python
-items = ['10', '20', 'a', '30', 'b', '40']
 only_digits = [int(item) for item in items if item.isdigit()]
 ```
 
@@ -468,7 +328,6 @@ only_digits = [int(item) for item in items if item.isdigit()]
 ```python
 [10, 20, 30, 40]
 ```
-
 
 
 ---
