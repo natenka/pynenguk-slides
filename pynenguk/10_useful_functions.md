@@ -449,24 +449,6 @@ Out[6]: False
 ---
 ### Функція any
 
-Функція any() возвращает True, если хотя бы один элемент истина.
-```python
-In [7]: any([False, True, True])
-Out[7]: True
-
-In [8]: any([False, False, False])
-Out[8]: False
-
-In [9]: any([])
-Out[9]: False
-
-In [10]: any( i.isdigit() for i in '10.1.1.a'.split('.'))
-Out[10]: True
-```
-
----
-### Функція any
-
 Функція any повертає True, якщо хоча б один елемент істинний.
 
 ```python
@@ -479,10 +461,9 @@ Out[8]: False
 In [9]: any([])
 Out[9]: False
 
-In [10]: any(i.isdigit() for i in '10.1.1.a'.split('.'))
+In [10]: any([i.isdigit() for i in '10.1.1.a'.split('.')])
 Out[10]: True
 ```
-
 
 ---
 ### Анонимная функция (лямбда-выражение)
