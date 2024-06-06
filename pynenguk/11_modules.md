@@ -1,3 +1,7 @@
+---
+date: ""
+---
+
 ## Модуль
 
 ---
@@ -21,6 +25,8 @@
 Модуль дозволяють повторно використовувати вже написаний код і не копіювати його.
 
 
+Імена файлів пишуться маленькими літерами, з підкреслення між словами.
+
 ---
 ## Імпорт модуля
 
@@ -30,8 +36,17 @@
 У Python є кілька способів імпорту модуля:
 
 * `import module`
-* `import module as`
 * `from module import object`
+
+---
+### Імпорт модуля
+
+У Python є кілька способів імпорту модуля:
+
+* `import module`
+* `import module as m`
+* `from module import object`
+* `from module import object as obj`
 * `from module import *`
 
 ---
