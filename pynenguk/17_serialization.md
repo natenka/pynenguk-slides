@@ -308,16 +308,17 @@ with open('sw_data2.csv') as f:
 
 ### Робота з файлами JSON
 
-__JSON (JavaScript Object Notation)__ - это текстовый формат для хранения и обмена данными.
+__JSON (JavaScript Object Notation)__ - це текстовий формат для зберігання та обміну даними.
 
-[JSON](https://ru.wikipedia.org/wiki/JSON) по синтаксису очень похож на Python. И достаточно удобен для восприятия.
 
-Как и в случае с CSV, в Python есть модуль, который позволяет легко записывать и читать данные в формате JSON.
+Синтаксис [JSON](https://en.wikipedia.org/wiki/JSON) дуже схожий на деякі типи даних в Python і, хоча назви елементів відрізняються, ця схожість допомогає зрозуміти структуру об'єктів JSON.
+
+Як і з CSV, в стандартній бібліотеці Python є модуль, який дозволяє записувати та читати дані у форматі JSON.
 
 
 ---
 
-### Чтение
+### Читання
 
 Файл sw_templates.json:
 ```json
@@ -340,48 +341,43 @@ __JSON (JavaScript Object Notation)__ - это текстовый формат �
 
 ---
 
-### Чтение. json.load()
+### Читання. json.load()
 
-Чтение файла в формате JSON в объект Python (файл json_read_load.py):
+Читання файлу JSON в об’єкт Python (файл json_read_load.py):
 ```python
 import json
+from pprint import pprint
+
 
 with open('sw_templates.json') as f:
     templates = json.load(f)
 
-for section, commands in templates.items():
-    print(section)
-    print('\n'.join(commands))
-
+pprint(templates)
 ```
 
 ---
 
-### Чтение. json.load()
+### Читання. json.load()
 
-Вывод будет таким:
+Результат буде таким:
 ```python
 $ python json_read_load.py
-{'access': ['switchport mode access', 'switchport access vlan', 'switchport nonegotiate', 'spanning-tree portfast', 'spanning-tree bpduguard enable'], 'trunk': ['switchport trunk encapsulation dot1q', 'switchport mode trunk', 'switchport trunk native vlan 999', 'switchport trunk allowed vlan']}
-access
-switchport mode access
-switchport access vlan
-switchport nonegotiate
-spanning-tree portfast
-spanning-tree bpduguard enable
-trunk
-switchport trunk encapsulation dot1q
-switchport mode trunk
-switchport trunk native vlan 999
-switchport trunk allowed vlan
-
+{'access': ['switchport mode access',
+            'switchport access vlan',
+            'switchport nonegotiate',
+            'spanning-tree portfast',
+            'spanning-tree bpduguard enable'],
+ 'trunk': ['switchport trunk encapsulation dot1q',
+           'switchport mode trunk',
+           'switchport trunk native vlan 999',
+           'switchport trunk allowed vlan']}
 ```
 
 ---
 
-### Чтение. json.loads()
+### Читання. json.loads()
 
-Считывание строки в формате JSON в объект Python (файл json_read_loads.py):
+Читання рядка в форматі JSON в об’єкт Python (файл json_read_loads.py):
 ```python
 import json
 
@@ -399,9 +395,9 @@ for section, commands in templates.items():
 
 
 ---
-### Запись. json.dumps()
+### Запис. json.dumps()
 
-Преобразование объекта в строку в формате JSON (json_write_dumps.py):
+Перетворення об’єкта на рядок JSON (json_write_dumps.py):
 ```python
 import json
 
@@ -417,7 +413,7 @@ access_template = ['switchport mode access',
                    'spanning-tree portfast',
                    'spanning-tree bpduguard enable']
 
-to_json = {'trunk':trunk_template, 'access':access_template}
+to_json = {'trunk': trunk_template, 'access': access_template}
 
 with open('sw_templates.json', 'w') as f:
     f.write(json.dumps(to_json))
@@ -428,9 +424,9 @@ with open('sw_templates.json') as f:
 ```
 
 ---
-### Запись. json.dump()
+### Запис. json.dump()
 
-Запись объекта Python в файл в формате JSON (файл json_write_dump.py):
+Запис об’єкта Python у файл у форматі JSON (файл json_write_dump.py):
 ```python
 import json
 
@@ -446,7 +442,7 @@ access_template = ['switchport mode access',
                    'spanning-tree portfast',
                    'spanning-tree bpduguard enable']
 
-to_json = {'trunk':trunk_template, 'access':access_template}
+to_json = {'trunk': trunk_template, 'access': access_template}
 
 with open('sw_templates.json', 'w') as f:
     json.dump(to_json, f)
@@ -457,9 +453,9 @@ with open('sw_templates.json') as f:
 ```
 
 ---
-### Запись
+### Запис
 
-Более удобный для чтения вывод (файл json_write_indent.py):
+Більш читабельний вивід (файл json_write_indent.py):
 ```python
 import json
 
@@ -484,34 +480,13 @@ with open('sw_templates.json') as f:
     print(f.read())
 ``` 
 
----
-### Запись
-
-Теперь содержимое файла sw_templates.json выглядит так:
-```json
-{
-  "access": [
-    "switchport mode access",
-    "switchport access vlan",
-    "switchport nonegotiate",
-    "spanning-tree portfast",
-    "spanning-tree bpduguard enable"
-  ],
-  "trunk": [
-    "switchport trunk encapsulation dot1q",
-    "switchport mode trunk",
-    "switchport trunk native vlan 999",
-    "switchport trunk allowed vlan"
-  ]
-}
-```
 
 ---
-### Изменение типа данных
+### Зміна типу даних
 
-При работе с форматом json, данные не всегда будут того же типа, что исходные данные в Python.
+Під час роботи з форматом JSON дані не завжди будуть того самого типу, що й вихідні дані в Python.
 
-Например, кортежи, при записи в JSON, превращаются в списки:
+Наприклад, кортежі, записані в JSON, перетворюються на списки:
 ```python
 
 In [1]: import json
@@ -530,7 +505,7 @@ In [4]: with open('trunk_template.json', 'w') as f:
 ```
 
 ---
-### Изменение типа данных
+### Зміна типу даних
 
 ```python
 
@@ -551,7 +526,7 @@ In [8]: print(templates)
 ```
 
 ---
-### Конвертация данных Python в JSON
+### Конвертація даних Python у JSON
 
 |  Python     | JSON  |
 |:-----------:|:-----:|
@@ -564,7 +539,7 @@ In [8]: print(templates)
 | None        | null  |
 
 ---
-### Конвертация JSON в данные Python
+### Конвертація JSON у дані Python
 
 | JSON  |  Python |
 |:-----:|:-------:|
@@ -580,11 +555,11 @@ In [8]: print(templates)
 
 
 ---
-### Ключи словарей
+### Ключі словника
 
-В формат JSON нельзя записать словарь у которого ключи - кортежи:
+У формат JSON не можна записати словник, у якого ключі - кортежі:
 ```python
-In [9]: to_json = {('trunk', 'cisco'):trunk_template, 'access':access_template}
+In [9]: to_json = {('trunk', 'cisco'): trunk_template, 'access': access_template}
 
 In [10]: with open('sw_templates.json', 'w') as f:
     ...:     json.dump(to_json, f)
@@ -594,9 +569,9 @@ TypeError: key ('trunk', 'cisco') is not a string
 ```
 
 ---
-### Ключи словарей
+### Ключі словника
 
-Специальный параметр позволяет игнорировать такие ключи:
+Спеціальний параметр дозволяє ігнорувати такі ключі:
 ```python
 In [11]: with open('sw_templates.json', 'w') as f:
     ...:     json.dump(to_json, f, skipkeys=True)
@@ -610,11 +585,11 @@ In [12]: cat sw_templates.json
 
 ---
 
-## Работа с файлами в формате YAML
+### Робота з файлами YAML
 
 ---
 
-### Работа с файлами в формате YAML
+### Робота з файлами YAML
 
 __YAML (YAML Ain't Markup Language)__ - еще один текстовый формат для записи данных.
 
@@ -743,7 +718,7 @@ pip install pyyaml
 
 ---
 
-#### Чтение из YAML
+#### Читання из YAML
 
 Файл info.yaml:
 ```yaml
@@ -769,7 +744,7 @@ pip install pyyaml
 
 ---
 
-#### Чтение из YAML
+#### Читання из YAML
 
 Чтение из YAML (файл yaml_read.py):
 ```python
@@ -785,7 +760,7 @@ pprint.pprint(templates)
 
 ---
 
-#### Чтение из YAML
+#### Читання из YAML
 Результат:
 ```python
 $ python yaml_read.py
@@ -813,7 +788,7 @@ $ python yaml_read.py
 
 ---
 
-#### Запись в YAML
+#### Запис в YAML
 
 Запись объектов Python в YAML (файл yaml_write.py):
 ```python
@@ -842,7 +817,7 @@ with open('sw_templates.yaml') as f:
 
 ---
 
-#### Запись в YAML
+#### Запис в YAML
 
 Файл sw_templates.yaml выглядит таким образом:
 ```yaml
@@ -854,7 +829,7 @@ trunk: [switchport trunk encapsulation dot1q, switchport mode trunk, switchport 
 
 ---
 
-#### Запись в YAML
+#### Запис в YAML
 
 Параметр ```default_flow_style=False``` (файл yaml_write_default_flow_style.py):
 ```python
@@ -882,7 +857,7 @@ with open('sw_templates.yaml') as f:
 
 ---
 
-#### Запись в YAML
+#### Запис в YAML
 
 Теперь содержимое файла sw_templates.yaml выглядит таким образом:
 ```yaml
