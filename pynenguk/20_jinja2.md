@@ -1,42 +1,42 @@
-# Python для сетевых инженеров 
+# Python для мережевих інженерів 
 
 ---
 
-# Шаблоны конфигураций с Jinja
+# Шаблони конфігурації з Jinja
 
 ---
 
-### Шаблоны конфигураций с Jinja
+### Шаблони конфігурації з Jinja
 
-[Jinja2](http://xgu.ru/wiki/Jinja2) это язык шаблонов, который используется в Python.
+Jinja2 це мова шаблонів, що використовується в Python.
 
-Jinja2 используется для генерации документов на основе одного или нескольких шаблонов.
+Jinja2 використовується для генерації тексту на основі одного або кількох шаблонів.
 
-Примеры использования:
-* шаблоны для генерации HTML-страниц
-* шаблоны для генерации конфигурационных файлов в Unix/Linux
-* шаблоны для генерации конфигурационных файлов сетевых устройств
+Приклади використання:
+* шаблони для створення HTML-сторінок
+* шаблони для створення файлів конфігурації в Unix/Linux
+* шаблони для генерації конфігураційних файлів мережевих пристроїв
 
 
-Установить Jinja2 можно с помощью pip:
+Ви можете встановити Jinja2 за допомогою pip:
 ```python
 pip install jinja2
 ```
 
 ---
 
-### Шаблоны конфигураций с Jinja
+### Шаблони конфігурації з Jinja
 
-Идея Jinja очень проста: разделение данных и шаблона.
-Это позволяет использовать один и тот же шаблон, но подставлять в него разные данные.
+Jinja дозволяє розділити дані та шаблон.
+Це дозволяє використовувати той самий шаблон, але замінювати в ньому різні дані.
 
-В самом простом случае, шаблон это просто текстовый файл, в котором указаны места подстановки значений, с помощью переменных Jinja.
+У найпростішому випадку шаблон - це текстовий файл, в якому вказані місця підстановки значень, за допомогою змінних Jinja.
 
 ---
 
-### Шаблоны конфигураций с Jinja
+### Шаблони конфігурації з Jinja
 
-Пример шаблона Jinja:
+Приклад шаблону Jinja:
 ```jinja
 hostname {{name}}
 !
@@ -56,9 +56,9 @@ router ospf 10
 
 ---
 
-### Шаблоны конфигураций с Jinja
+### Шаблони конфігурації з Jinja
 
-Пример шаблона Jinja:
+Приклад шаблону Jinja:
 ```jinja
 hostname {{ name }}
 
@@ -82,12 +82,12 @@ router ospf 1
 ```
 ---
 
-## Пример использования Jinja
+## Приклад використання Jinja
 
 
 ---
 
-Шаблон templates/router_template.txt это обычный текстовый файл:
+Шаблон templates/router_template.txt — це звичайний текстовий файл:
 ```
 hostname {{name}}
 !
@@ -107,7 +107,7 @@ router ospf {{ process_id | default(100) }}
 
 ---
 
-Файл с данными routers_info.yml
+Файл даних routers_info.yml
 ```
 - id: '11'
   int: Gi1/0/1
@@ -125,7 +125,7 @@ router ospf {{ process_id | default(100) }}
 
 ---
 
-Скрипт для генерации конфигураций router_config_generator_ver2.py
+Скрипт для генерації конфігурацій router_config_generator_ver2.py
 ```python
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 import yaml
@@ -157,34 +157,34 @@ loader = FileSystemLoader(["/override/templates", "/default/templates"])
 
 ---
 
-## Синтаксис шаблонов Jinja2
+## Синтаксис шаблонів Jinja2
 
 ---
 
-## Синтаксис шаблонов Jinja2
+## Синтаксис шаблонів Jinja2
 
-До сих пор, в примерах шаблонов Jinja2 использовалась только подстановка переменных.
-Это самый простой и понятный пример использования шаблонов, но синтаксис шаблонов Jinja на этом не ограничивается.
-
----
-
-## Синтаксис шаблонов Jinja2
-
-В шаблонах Jinja2 можно использовать:
-* переменные
-* условия (if/else)
-* циклы (for)
-* фильтры - специальные встроенные методы, которые позволяют делать преобразования переменных
-* тесты - используются для проверки соответствует ли переменная какому-то условию
-
-Кроме того, Jinja поддерживает наследование между шаблонами.
-А также позволяет добавлять содержимое одного шаблона в другой.
+Поки що приклади шаблонів Jinja2 використовували лише заміну змінних.
+Це найпростіший і найзрозуміліший приклад використання шаблонів, але синтаксис шаблону Jinja цим не обмежується.
 
 ---
 
-## Синтаксис шаблонов Jinja2
+## Синтаксис шаблонів Jinja2
 
-Для генерации шаблонов будет использовать скрипт cfg_gen.py
+У шаблонах Jinja2 можна використовувати:
+* змінні
+* умови (if/else)
+* цикл (for)
+* фільтри — це спеціальні вбудовані методи, які дозволяють трансформувати змінні
+* тести - використовуються для перевірки, чи відповідає змінна певній умові
+
+Крім того, Jinja підтримує успадкування між шаблонами.
+Це також дозволяє додавати вміст одного шаблону до іншого.
+
+---
+
+## Синтаксис шаблонів Jinja2
+
+Скрипт cfg_gen.py буде використовуватися для створення шаблонів
 ```python
 # -*- coding: utf-8 -*-
 from jinja2 import Environment, FileSystemLoader
@@ -205,47 +205,47 @@ print(template.render(vars_dict))
 
 ---
 
-## Синтаксис шаблонов Jinja2
+## Синтаксис шаблонів Jinja2
 
-В строке
 ```
-env = Environment(loader = FileSystemLoader(TEMPLATE_DIR), trim_blocks=True)
+env = Environment(loader=FileSystemLoader(TEMPLATE_DIR), trim_blocks=True)
 ```
 
-Параметр ```trim_blocks=True``` - удаляет первую пустую строку после блока конструкции, если установлено в True (по умолчанию False).
+Параметр ```trim_blocks=True``` - видаляє перший порожній рядок після  блоку, якщо встановлено значення True (за замовчуванням False).
 
-Также можно добавлять параметр ```lstrip_blocks=True``` - если установлено в True, пробелы и табы в начале строки удаляются (по умолчанию False).
+Ви також можете додати параметр ```lstrip_blocks=True``` - якщо встановлено значення True, пробіли та табуляції на початку рядка видаляються (за замовчуванням False).
 
 ---
 
-## Синтаксис шаблонов Jinja2
+## Синтаксис шаблонів Jinja2
 
-Для того, чтобы посмотреть на результат, нужно вызвать скрипт и передать ему два аргумента:
+Щоб переглянути результат, потрібно викликати скрипт і передати йому два аргументи:
 * шаблон
-* файл с переменными, в формате YAML
+* файл зі змінними у форматі YAML
 
-Результат будет выведен на стандартный поток вывода.
+Результат буде виведено на стандартний потік виведення.
 
 ---
 
-## Синтаксис шаблонов Jinja2
+## Синтаксис шаблонів Jinja2
 
-Пример запуска скрипта:
+Приклад запуску скрипту:
 ```
 $ python cfg_gen.py templates/variables.txt data_files/vars.yml
 ```
 
 ---
 
-## Контроль символов whitespace
+## Контроль символів whitespace
 
 ---
 
 ### trim_blocks
 
-Параметр ```trim_blocks``` удаляет первую пустую строку после блока конструкции, если его значение равно True (по умолчанию False).
 
-Посмотрим на эффект применения флага на примере шаблона templates/env_flags.txt:
+Параметр ```trim_blocks``` видаляє перший порожній рядок після блоку Jinja, якщо його значення True (за замовчуванням False).
+
+Приклад шаблону templates/env_flags.txt:
 ```
 router bgp {{ bgp.local_as }}
  {% for ibgp in bgp.ibgp_neighbors %}
@@ -258,12 +258,12 @@ router bgp {{ bgp.local_as }}
 
 ### trim_blocks
 
-Если скрипт cfg_gen.py запускается без флагов trim_blocks, lstrip_blocks:
+Якщо скрипт cfg_gen.py виконується без позначок trim_blocks, lstrip_blocks:
 ```
-env = Environment(loader = FileSystemLoader(TEMPLATE_DIR))
+env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 ```
 
-Вывод будет таким:
+Результат буде таким:
 ```
 $ python cfg_gen.py templates/env_flags.txt data_files/router.yml
 router bgp 100
@@ -279,12 +279,12 @@ router bgp 100
 
 ### trim_blocks
 
-При добавлении флага trim_blocks таким образом:
+При додаванні прапора trim_blocks таким чином:
 ```python
-env = Environment(loader = FileSystemLoader(TEMPLATE_DIR), trim_blocks=True)
+env = Environment(loader=FileSystemLoader(TEMPLATE_DIR), trim_blocks=True)
 ```
 
-Результат выполнения будет таким:
+Результат виконання буде таким:
 ```
 $ python cfg_gen.py templates/env_flags.txt data_files/router.yml
 router bgp 100
@@ -299,29 +299,26 @@ router bgp 100
 
 ### lstrip_blocks
 
-Но перед строками ```neighbor ... remote-as``` появились два пробела.
-Так получилось из-за того, что перед блоком ```{% for ibgp in bgp.ibgp_neighbors %}``` стоит пробел.
-После того, как был отключен лишний перевод строки, пробелы и табы перед блоком добавляются к первой строке блока.
+Перед рядками ```neighbor ... remote-as`` з'явилися два пробіли.
+Це сталося тому, що перед ```{% for ibgp in bgp.ibgp_neighbors %}``` є пробіл.
+Після вимкнення додаткового переходу рядка пробіли та табуляції перед блоком додаються до першого рядка блоку.
 
-Но это не влияет на следующие строки.
-Поэтому строки с ```neighbor ... update-source``` отображаются с одним пробелом.
-
----
-
-### lstrip_blocks
-
-Параметр ```lstrip_blocks``` контролирует то, будут ли удаляться пробелы и табы от начала строки до начала блока (до открывающейся фигурной скобки).
-
-Если добавить аргумент ```lstrip_blocks=True``` таким образом:
-```
-env = Environment(loader = FileSystemLoader(TEMPLATE_DIR), trim_blocks=True, lstrip_blocks=True)
-```
+Але це не впливає на наступні рядки.
+Таким чином, рядки з ```neighbor ... update-source``` відображаються через один пробіл.
 
 ---
 
 ### lstrip_blocks
 
-Результат выполнения будет таким:
+Параметр ```lstrip_blocks``` контролює, чи видаляються пробіли та символи табуляції від початку рядка до початку блоку (перед відкриваючою фігурною дужкою).
+
+Якщо додати аргумент ```lstrip_blocks=True``` таким чином:
+```
+env = Environment(loader=FileSystemLoader(TEMPLATE_DIR),
+                  trim_blocks=True, lstrip_blocks=True)
+```
+
+Результат виконання буде таким:
 ```
 $ python cfg_gen.py templates/env_flags.txt data_files/router.yml
 router bgp 100
@@ -331,196 +328,14 @@ router bgp 100
  neighbor 10.0.0.3 update-source lo100
 ```
 
----
-
-### Отключение lstrip_blocks для блока
-
-Иногда, нужно отключить функциональность lstrip_blocks для блока.
-
-Например, если параметр ```lstrip_blocks``` установлен равным True в окружении, но нужно отключить его для второго блока в шаблоне (файл templates/env_flags2.txt):
-```
-router bgp {{ bgp.local_as }}
- {% for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {% endfor %}
-
-router bgp {{ bgp.local_as }}
- {%+ for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {% endfor %}
-```
 
 ---
-
-### Отключение lstrip_blocks для блока
-
-Результат будет таким:
-```
-$ python cfg_gen.py templates/env_flags2.txt data_files/router.yml
-router bgp 100
- neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-
-router bgp 100
-  neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-```
+## Змінні
 
 ---
+### Змінні
 
-### Отключение lstrip_blocks для блока
-
-Плюс после знака процента отключает lstrip_blocks для блока.
-В данном случае, только для начала блока.
-
-Если сделать таким образом (плюс добавлен в выражении для завершения блока):
-```
-router bgp {{ bgp.local_as }}
- {% for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {% endfor %}
-
-router bgp {{ bgp.local_as }}
- {%+ for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {%+ endfor %}
-```
-
----
-
-### Отключение lstrip_blocks для блока
-
-Он будет отключен и для конца блока:
-```
-$ python cfg_gen.py templates/env_flags2.txt data_files/router.yml
-router bgp 100
- neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-
-router bgp 100
-  neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
-  neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-```
-
----
-
-### Удаление whitespace в блоке
-
-Аналогичным образом можно контролировать удаление whitespace для блока.
-
-Для этого примера в окружении не выставлены флаги:
-```
-env = Environment(loader = FileSystemLoader(TEMPLATE_DIR))
-```
-
----
-
-### Удаление whitespace в блоке
-
-Шаблон templates/env_flags3.txt:
-```
-router bgp {{ bgp.local_as }}
- {% for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {% endfor %}
-
-router bgp {{ bgp.local_as }}
- {%- for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {% endfor %}
-```
-
-Обратите внимание на минус в начале второго блока.
-Минут удаляет все whitespace символы. В данном случае, в начале блока.
-
----
-
-### Удаление whitespace в блоке
-
-Результат будет таким:
-```
-$ python cfg_gen.py templates/env_flags3.txt data_files/router.yml
-router bgp 100
-
- neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
-
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-
-
-router bgp 100
- neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
-
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-
-```
-
----
-
-### Удаление whitespace в блоке
-
-Если добавить минут в конец блока:
-```
-router bgp {{ bgp.local_as }}
- {% for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {% endfor %}
-
-router bgp {{ bgp.local_as }}
- {%- for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
- {%- endfor %}
-```
-
----
-
-### Удаление whitespace в блоке
-
-Удалится пустая строка и в конце блока:
-```
-$ python cfg_gen.py templates/env_flags3.txt data_files/router.yml
-router bgp 100
-
- neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
-
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-
-
-router bgp 100
- neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
-```
-
----
-## Переменные
-
----
-### Переменные
-
-Переменные в шаблоне указываются в двойных фигурных скобках:
+Змінні в шаблоні вказані в подвійних фігурних дужках:
 ```
 hostname {{ name }}
 
@@ -529,17 +344,17 @@ interface Loopback0
 ```
 
 ---
-### Переменные
+### Змінні
 
-Значения переменных подставляются на основе словаря, который передается шаблону.
+Значення змінних підставляються на основі словника, який передається в шаблон.
 
-Переменная, которая передается в словаре, может быть не только числом или строкой, но и, например, списком или словарем.
-Внутри шаблона можно, соответственно, обращаться к элементу по номеру или по ключу.
+Змінна, яка передається в словник, може бути не тільки числом або рядком, але також, наприклад, списком або словником.
+Всередині шаблону можна, відповідно, отримати доступ до елемента за номером або ключем.
 
 ---
-### Переменные
+### Змінні
 
-Пример шаблона templates/variables.txt, с использованием разных вариантов переменных:
+Приклад templates/variables.txt із використанням різних варіантів змінних:
 ```
 hostname {{ name }}
 
@@ -555,9 +370,9 @@ router ospf 1
 ```
 
 ---
-### Переменные
+### Змінні
 
-И соответствующий файл data_files/vars.yml с переменными:
+І відповідний файл data_files/vars.yml зі змінними:
 ```
 id: 3
 name: R3
@@ -571,7 +386,7 @@ ospf:
 ```
 
 ---
-### Переменные
+### Змінні
 
 Обратите внимание на использование переменной vlans в шаблоне:
 * так как переменная vlans это список, можно указывать какой именно элемент из списка нам нужен
@@ -579,10 +394,19 @@ ospf:
 Если передается словарь (как в случае с переменной ospf), то внутри шаблона можно обращаться к объектам словаря, используя один из вариантов:
 * ospf.network или ospf['network']
 
----
-### Переменные
+Зверніть увагу на використання змінної vlans у шаблоні: оскільки змінна vlan є списком, можна вказати, який елемент зі списку потрібен.
 
-Результат запуска скрипта будет таким:
+Якщо передано словник (як у випадку зі змінною ospf), то в межах шаблону можна отримати доступ до значень словника за допомогою одного з варіантів:
+
+```python
+ospf.network
+ospf['network']
+```
+
+---
+### Змінні
+
+Результат виконання скрипта буде таким:
 ```
 $ python cfg_gen.py templates/variables.txt data_files/vars.yml
 hostname R3
@@ -604,10 +428,10 @@ router ospf 1
 ---
 ### Цикл for
 
-Цикл for позволяет проходится по элементам последовательности.
+Цикл for дозволяє вам перебирати елементи послідовності.
 
-Цикл for должен находится внутри символов ```{% %}```.
-Кроме того, нужно явно указывать завершение цикла:
+Цикл for має бути всередині символів ```{% %}```.
+Крім того, потрібно явно вказати кінець циклу:
 ```
 {% for vlan in vlans %}
   vlan {{ vlan }}
@@ -617,7 +441,7 @@ router ospf 1
 ---
 ### Цикл for
 
-Пример шаблона templates/for.txt с использованием цикла:
+Приклад шаблону templates/for.txt з використанням циклу:
 ```
 hostname {{ name }}
 
@@ -640,7 +464,7 @@ router ospf 1
 ---
 ### Цикл for
 
-Файл data_files/for.yml с переменными:
+Файл data_files/for.yml зі змінними:
 ```yml
 id: 3
 name: R3
@@ -660,12 +484,13 @@ ospf:
 ---
 ### Цикл for
 
-В цикле for можно проходится как по элементам списка (например, список ospf), так и по словарю (словарь vlans). И, аналогичным образом, по любой последовательности.
+У циклі for можна перебирати елементи списку (наприклад, список ospf), словники (словник vlan) та інші ітеровані об'єкти.
+
 
 ---
 ### Цикл for
 
-Результат выполнения будет таким:
+Результат виконання буде таким:
 ```
 $ python cfg_gen.py templates/for.txt data_files/for.yml
 hostname R3
@@ -695,13 +520,13 @@ router ospf 1
 ---
 ###  if/elif/else
 
-if позволяет добавлять условие в шаблон. Например, можно использовать if чтобы добавлять какие-то части шаблона, в зависимости от наличия переменных в словаре с данными.
+if дозволяє додати умову до шаблону. Наприклад, ви можете використовувати if, щоб додати деякі частини шаблону, залежно від наявності змінних у словнику даних.
+
 
 ---
 ###  if/elif/else
 
-Конструкция if также должна находиться внутри ```{% %}```.
-И нужно явно указывать окончание условия:
+Конструкція if також має бути всередині ```{% %}``` і має бути явно вказаний кінець умови:
 ```
 {% if ospf %}
 router ospf 1
@@ -713,7 +538,7 @@ router ospf 1
 ---
 ###  if/elif/else
 
-Пример шаблона templates/if.txt:
+Приклад шаблону templates/if.txt:
 ```
 hostname {{ name }}
 
@@ -738,16 +563,17 @@ router ospf 1
 ---
 ###  if/elif/else
 
-Выражение ```if ospf``` работает так же, как в Python: если переменная существует и не пустая, результат будет True. Если переменной нет, или она пустая, результат будет False.
+Вираз ```if ospf``` працює так само, як і в Python: якщо змінна існує і не є порожньою, результатом буде True. Якщо змінної немає або вона порожня, результат буде False.
 
-То есть, в этом шаблоне конфигурация OSPF генерируется только в том случае, если переменная ospf существует и не пустая.
+Тобто в цьому шаблоні конфігурація OSPF генерується, лише якщо змінна ospf існує і є істинною.
+
 
 ---
 ###  if/elif/else
 
-Конфигурация будет генерироваться с двумя вариантами данных.
+Конфігурацію буде згенеровано з двома параметрами даних.
 
-Сначала, с файлом data_files/if.yml, в котором нет переменной ospf:
+По-перше, з файлом data_files/if.yml, який не містить змінної ospf:
 ```yml
 id: 3
 name: R3
@@ -757,10 +583,7 @@ vlans:
   30: Management
 ```
 
----
-###  if/elif/else
-
-Результат будет таким:
+Результат буде таким:
 ```
 $ python cfg_gen.py templates/if.txt data_files/if.yml
 
@@ -775,13 +598,12 @@ vlan 20
  name Voice
 vlan 30
  name Management
-
 ```
 
 ---
 ###  if/elif/else
 
-Теперь аналогичный шаблон, но с файлом data_files/if_ospf.yml:
+Тепер той самий шаблон, але з файлом data_files/if_ospf.yml:
 ```yml
 id: 3
 name: R3
@@ -801,7 +623,7 @@ ospf:
 ---
 ###  if/elif/else
 
-Теперь результат выполнения будет таким:
+Тепер результат виконання буде таким:
 ```
 hostname R3
 
@@ -826,9 +648,9 @@ router ospf 1
 ---
 ###  if/elif/else
 
-Как и в Python, в Jinja можно делать ответвления в условии.
+Як і Python, Jinja дозволяє розгалужуватися в межах умови.
 
-Пример шаблона templates/if_vlans.txt:
+Приклад шаблону templates/if_vlans.txt:
 ```
 {% for intf, params in trunks.items() %}
 interface {{ intf }}
@@ -845,7 +667,7 @@ interface {{ intf }}
 ---
 ###  if/elif/else
 
-Файл data_files/if_vlans.yml с данными:
+Файл data_files/if_vlans.yml з даними:
 ```yml
 trunks:
   Fa0/1:
@@ -859,12 +681,12 @@ trunks:
     vlans: 10
 ```
 
-В данном примере, в зависимости от значения параметра action, генерируются разные команды.
+У цьому прикладі залежно від значення параметра дії генеруються різні команди.
 
 ---
 ###  if/elif/else
 
-В шаблоне можно было использовать и такой вариант обращения к вложенным словарям:
+Шаблон може також використовувати наступний параметр для доступу до вкладених словників:
 ```
 {% for intf in trunks %}
 interface {{ intf }}
@@ -881,7 +703,7 @@ interface {{ intf }}
 ---
 ###  if/elif/else
 
-В итоге, будет сгенерирована такая конфигурация:
+В результаті буде згенерована така конфігурація:
 ```
 $ python cfg_gen.py templates/if_vlans.txt data_files/if_vlans.yml
 interface Fa0/1
@@ -894,10 +716,7 @@ interface Fa0/2
 
 ---
 ###  if/elif/else
-
-Также, с помощью if, можно фильтровать по каким элементам последовательности пройдется цикл for.
-
-Пример шаблона templates/if_for.txt с фильтром, в цикле for:
+Приклад шаблону templates/if_for.txt із умовою в циклі for:
 ```
 {% for vlan, name in vlans.items() if vlan > 15 %}
 vlan {{ vlan }}
@@ -908,7 +727,7 @@ vlan {{ vlan }}
 ---
 ###  if/elif/else
 
-Файл с данными (data_files/if_for.yml):
+Файл даних (data_files/if_for.yml):
 ```yml
 vlans:
   10: Marketing
@@ -919,7 +738,7 @@ vlans:
 ---
 ###  if/elif/else
 
-Результат выполнения:
+Результат виконання:
 ```
 $ python cfg_gen.py templates/if_for.txt data_files/if_for.yml
 vlan 20
@@ -929,37 +748,41 @@ vlan 30
 ```
 
 ---
-## Фильтры
+## Фільтри
 
 ---
-### Фильтры
+### Фільтри
 
-В Jinja переменные можно изменять с помощью фильтров.
-Фильтры отделяются от переменной вертикальной чертой (pipe ```|```) и могут содержать дополнительные аргументы.
+У Jinja змінні можна змінювати за допомогою фільтрів.
+Фільтри відокремлюються від змінної вертикальною рискою (часточкою ``|``) і можуть містити додаткові аргументи.
 
-Кроме того, к переменной могут быть применены несколько фильтров.
-В таком случае, фильтры просто пишутся последовательно, и каждый из них отделен вертикальной чертой.
+Крім того, до змінної можна застосувати декілька фільтрів.
+У цьому випадку фільтри записуються послідовно, і кожен з них відокремлюється вертикальною рискою.
 
----
-### Фильтры
-
-Jinja поддерживает большое количество встроенных фильтров.
-Мы рассмотрим лишь несколько из них.
-Остальные фильтры можно найти в [документации](http://jinja.pocoo.org/docs/dev/templates/#builtin-filters).
-
-Также, достаточно легко, можно создавать и свои собственные фильтры.
-Мы не будем рассматривать эту возможность, но это хорошо описано в [документации ](http://jinja.pocoo.org/docs/2.9/api/#custom-filters).
+```
+auto-cost reference-bandwidth {{ ref_bw | default(10000) }}
+```
 
 ---
-### default
+### Фільтри
 
-Фильтр default позволяет указать для переменной значение по умолчанию.
-Если переменная определена, будет выводиться переменная, если переменная не определена, будет выводиться значение, которое указано в фильтре default.
+Jinja підтримує велику кількість вбудованих фільтрів.
+Ми розглянемо лише деякі з них.
+Решту фільтрів можна знайти в [документації](http://jinja.pocoo.org/docs/dev/templates/#builtin-filters).
+
+Крім того, досить легко ви можете створювати власні фільтри.
+Ми не розглядатимемо цю можливість, але вона добре описана в [документації](http://jinja.pocoo.org/docs/2.9/api/#custom-filters).
 
 ---
 ### default
 
-Пример шаблона templates/filter_default.txt:
+Фільтр ``default`` дозволяє вказати значення за замовчуванням для змінної.
+Якщо змінну визначено, буде підставлена вона; якщо змінна не визначена, буде підставлено значення, яке вказане у фільтрі default.
+
+---
+### default
+
+Приклад шаблону templates/filter_default.txt:
 ```
 router ospf 1
  auto-cost reference-bandwidth {{ ref_bw | default(10000) }}
@@ -968,13 +791,13 @@ router ospf 1
  {% endfor %}
 ```
 
-Если переменная ref_bw определена в словаре, будет подставлено её значение.
-Если же переменной нет, будет подставлено значение 10000.
+Якщо змінна ref_bw визначена в словнику, буде підставлене її значення.
+Якщо змінної немає, буде підставлене значення 10000.
 
 ---
 ### default
 
-Файл с данными (data_files/filter_default.yml):
+Файл даних (data_files/filter_default.yml):
 ```yml
 ospf:
   - network: 10.0.1.0 0.0.0.255
@@ -988,7 +811,7 @@ ospf:
 ---
 ### default
 
-Результат выполнения:
+Результат виконання:
 ```
 $ python cfg_gen.py templates/filter_default.txt data_files/filter_default.yml
 router ospf 1
@@ -1001,14 +824,14 @@ router ospf 1
 ---
 ### default
 
-По умолчанию, если переменная определена и её значение пустой объект, будет считаться, что переменная и её значение есть.
+За замовчуванням, якщо змінну визначено, а її значення є порожнім об’єктом, вважатиметься, що змінна та її значення існує.
 
-Если нужно сделать так, чтобы значение по умолчанию подставлялось и в том случае, когда переменная пустая (то есть, обрабатывается как False в Python), надо указать дополнительный параметр ```boolean=true```.
+Якщо ви хочете переконатися, що значення за замовчуванням замінюється навіть тоді, коли змінна порожня (тобто обробляється як False у Python), треба вказати додатковий параметр ``boolean=true``.
 
 ---
 ### default
 
-Например, если файл данных был бы таким:
+Наприклад, якщо файл даних такий:
 ```
 ref_bw: ''
 ospf:
@@ -1020,10 +843,7 @@ ospf:
     area: 0
 ```
 
----
-### default
-
-То в итоге сгенерировался такой результат:
+В результаті буде отриманий такий результат:
 ```
 $ python cfg_gen.py templates/filter_default.txt data_files/filter_default.yml
 router ospf 1
@@ -1036,7 +856,7 @@ router ospf 1
 ---
 ### default
 
-Если же, при таком же файле данных, изменить шаблон таким образом:
+Якщо з тим самим файлом даних, змінити шаблон таким чином:
 ```
 router ospf 1
  auto-cost reference-bandwidth {{ ref_bw | default(10000, boolean=true) }}
@@ -1045,12 +865,7 @@ router ospf 1
 {% endfor %}
 ```
 
-Вместо ```default(10000, boolean=true)```, можно написать default(10000, true)
-
----
-### default
-
-Результат уже будет таким (значение по умолчанию подставится):
+Результат вже буде таким (буде підставлено значення за замовчуванням):
 ```
 $ python cfg_gen.py templates/filter_default.txt data_files/filter_default.yml
 router ospf 1
@@ -1063,21 +878,21 @@ router ospf 1
 ---
 ### dictsort
 
-Фильтр dictsort позволяет сортировать словарь.
-По умолчанию, сортировка выполняется по ключам.
-Но, изменив параметры фильтра, можно выполнять сортировку по значениям.
+Фільтр dictsort дозволяє сортувати словник.
+За замовчуванням сортування виконується за ключами.
+Однак, змінивши параметри фільтра, можна сортувати за значеннями.
 
-Синтаксис фильтра:
+Синтаксис фільтра:
 ```
 dictsort(value, case_sensitive=False, by='key')
 ```
 
-После того, как dictsort отсортировал словарь, он возвращает список кортежей, а не словарь.
+Після того як dictsort відсортував словник, він повертає список кортежів, а не словник.
 
 ---
 ### dictsort
 
-Пример шаблона templates/filter_dictsort.txt с использованием фильтра dictsort:
+Приклад templates/filter_dictsort.txt із використанням фільтра dictsort:
 ```
 {% for intf, params in trunks | dictsort %}
 interface {{ intf }}
@@ -1091,12 +906,10 @@ interface {{ intf }}
 {% endfor %}
 ```
 
-Обратите внимание, что фильтр ожидает словарь, а не список кортежей или итератор.
-
 ---
 ### dictsort
 
-Файл с данными (data_files/filter_dictsort.yml):
+Файл даних (data_files/filter_dictsort.yml):
 ```yml
 trunks:
   Fa0/1:
@@ -1113,7 +926,7 @@ trunks:
 ---
 ### dictsort
 
-Результат выполнения будет таким (интерфейсы упорядочены):
+Результат виконання буде таким (інтерфейси впорядковані):
 ```
 $ python cfg_gen.py templates/filter_dictsort.txt data_files/filter_dictsort.yml
 interface Fa0/1
@@ -1124,18 +937,17 @@ interface Fa0/3
   switchport trunk allowed vlan remove 10
 ```
 
+---
+### join
+
+Фільтр join працює так само, як метод join в Python.
+
+Використовуючи фільтр join, можна об’єднати елементи послідовності в рядок із необов’язковим роздільником між елементами.
 
 ---
 ### join
 
-Фильтр join работает так же, как и метод join в Python.
-
-С помощью фильтра join можно объединять элементы последовательности в строку, с опциональным разделителем между элементами.
-
----
-### join
-
-Пример шаблона templates/filter_join.txt с использованием фильтра join:
+Приклад шаблону templates/filter_join.txt із використанням фільтра join:
 ```
 {% for intf, params in trunks | dictsort %}
 interface {{ intf }}
@@ -1152,7 +964,7 @@ interface {{ intf }}
 ---
 ### join
 
-Файл с данными (data_files/filter_join.yml):
+Файл даних (data_files/filter_join.yml):
 ```yml
 trunks:
   Fa0/1:
@@ -1174,7 +986,7 @@ trunks:
 ---
 ### join
 
-Результат выполнения:
+Результат виконання:
 ```
 $ python cfg_gen.py templates/filter_join.txt data_files/filter_join.yml
 interface Fa0/1
@@ -1187,26 +999,26 @@ interface Fa0/3
 ```
 
 ---
-## Тесты
+## Тести
 
 ---
-### Тесты
+### Тести
 
-Кроме фильтров, Jinja также поддерживает тесты.
-Тесты позволяют проверять переменные на какое-то условие.
+Окрім фільтрів, Jinja також підтримує тести.
+Тести дозволяють перевірити змінні на певну умову.
 
-Jinja поддерживает большое количество встроенных тестов.
-Мы рассмотрим лишь несколько из них.
-Остальные тесты вы можете найти в [документации](http://jinja.pocoo.org/docs/dev/templates/#builtin-tests).
+Jinja підтримує велику кількість вбудованих тестів.
+Ми розглянемо лише деякі з них.
+Ви можете знайти решту тестів у [документації](http://jinja.pocoo.org/docs/dev/templates/#builtin-tests).
 
-Тесты, как и фильтры, можно создавать самостоятельно.
+Тести, як і фільтри, можна створювати самостійно.
 
 ---
 ### defined
 
-Тест defined позволяет проверить есть ли переменная в словаре данных.
+Тест defined дозволяє перевірити, чи існує змінна в словнику даних.
 
-Пример шаблона templates/test_defined.txt:
+Приклад шаблону templates/test_defined.txt:
 ```
 router ospf 1
 {% if ref_bw is defined %}
@@ -1222,9 +1034,10 @@ router ospf 1
 ---
 ### defined
 
-Этот пример более громоздкий, чем вариант с использованием фильтра default, но этот тест может быть полезен в том случае, если, в зависимости от того, определена переменная или нет, нужно выполнять разные команды.
+Цей приклад більш громіздкий, ніж використання фільтра за замовчуванням, але цей тест може бути корисним, якщо вам потрібно виконати різні команди залежно від того, визначена змінна чи ні.
 
-Файл с данными (data_files/test_defined.yml):
+Файл даних (data_files/test_defined.yml):
+
 ```yml
 ospf:
   - network: 10.0.1.0 0.0.0.255
@@ -1238,7 +1051,7 @@ ospf:
 ---
 ### defined
 
-Результат выполнения:
+Результат виконання:
 ```
 $ python cfg_gen.py templates/test_defined.txt data_files/test_defined.yml
 router ospf 1
@@ -1249,107 +1062,27 @@ router ospf 1
 ```
 
 ---
-### iterable
-
-Тест iterable проверяет является ли объект итератором.
-
-Благодаря таким проверкам, можно делать ответвления в шаблоне, которые будут учитывать тип переменной.
-
----
-### iterable
-
-Шаблон templates/test_iterable.txt (сделаны отступы, чтобы былы понятней ответвления):
-```
-{% for intf, params in trunks | dictsort %}
-interface {{ intf }}
- {% if params.vlans is iterable %}
-   {% if params.action == 'add' %}
- switchport trunk allowed vlan add {{ params.vlans | join(',') }}
-   {% elif params.action == 'delete' %}
- switchport trunk allowed vlan remove {{ params.vlans | join(',') }}
-   {% else %}
- switchport trunk allowed vlan {{ params.vlans | join(',') }}
-   {% endif %}
- {% else %}
-   {% if params.action == 'add' %}
- switchport trunk allowed vlan add {{ params.vlans }}
-   {% elif params.action == 'delete' %}
- switchport trunk allowed vlan remove {{ params.vlans }}
-   {% else %}
- switchport trunk allowed vlan {{ params.vlans }}
-   {% endif %}
- {% endif %}
-{% endfor %}
-```
-
----
-### iterable
-
-Файл с данными (data_files/test_iterable.yml):
-```yml
-trunks:
-  Fa0/1:
-    action: add
-    vlans:
-      - 10
-      - 20
-  Fa0/2:
-    action: only
-    vlans:
-      - 10
-      - 30
-  Fa0/3:
-    action: delete
-    vlans: 10
-```
-
----
-### iterable
-
-Обратите внимание на последнюю строку: ```vlans: 10```.
-В данном случае, 10 уже не находится в списке и фильтр join в таком случае не работает.
-Но, засчет теста ```is iterable``` (в этом случае результат будет false), в этом случае шаблон уходит в ветку else.
-
-
----
-### iterable
-
-Результат выполнения:
-```
-$ python cfg_gen.py templates/test_iterable.txt data_files/test_iterable.yml
-  interface Fa0/1
-            switchport trunk allowed vlan add 10,20
-        interface Fa0/2
-            switchport trunk allowed vlan 10,30
-        interface Fa0/3
-            switchport trunk allowed vlan remove 10
-```
-
-Такие отступы получились из-за того, что в шаблоне используются отступы, но не установлено lstrip_blocks=True (он удалет пробелы и табы в начале строки).
-
----
 ## set
 
 ---
 ### set
 
-Внутри шаблона можно присваивать значения переменным.
-Это могут быть новые переменные, а могут быть измененные значения переменных, которые были переданы шаблону.
+У межах шаблону можна створювати нові змінні і призначати їм значення.
+Це можуть бути нові змінні, або це можуть бути змінені значення змінних, які були передані в шаблон.
 
-Таким образом можно запомнить значение, которое, например, было получено в результате применения нескольких фильтров.
-И в дальнейшем использовать имя переменной, а не повторять снова все фильтры.
+Таким чином можна запам'ятати значення, яке, наприклад, було отримано в результаті застосування кількох фільтрів.
+І в майбутньому використовувати назву змінної, а не повторювати всі фільтри знову.
 
 ---
 ### set
 
-Пример шаблона templates/set.txt, в котором выражение set используется чтобы задать более короткие имена параметрам:
+Приклад шаблону templates/set.txt, у якому вираз set використовується для надання коротших назв параметрів:
 ```
 {% for intf, params in trunks | dictsort %}
  {% set vlans = params.vlans %}
  {% set action = params.action %}
 
 interface {{ intf }}
- {% if vlans is iterable %}
   {% if action == 'add' %}
  switchport trunk allowed vlan add {{ vlans | join(',') }}
   {% elif action == 'delete' %}
@@ -1357,34 +1090,25 @@ interface {{ intf }}
   {% else %}
  switchport trunk allowed vlan {{ vlans | join(',') }}
   {% endif %}
- {% else %}
-  {% if action == 'add' %}
- switchport trunk allowed vlan add {{ vlans }}
-  {% elif action == 'delete' %}
- switchport trunk allowed vlan remove {{ vlans }}
-  {% else %}
- switchport trunk allowed vlan {{ vlans }}
-  {% endif %}
- {% endif %}
 {% endfor %}
 ```
 
 ---
 ### set
 
-Обратите внимание на вторую и третюю строки:
+Зверніть увагу на другий і третій рядки:
 ```
   {% set vlans = params.vlans %}
   {% set action = params.action %}
 ```
 
-Таким образом созданы новые переменные и дальше используются уже эти новые значения.
-Так шаблон выглядит понятней.
+Таким чином, створюються нові змінні, і ці нові значення потім використовуються.
+Це робить шаблон зрозумілішим.
 
 ---
 ### set
 
-Файл с данными (data_files/set.yml):
+Файл даних (data_files/set.yml):
 ```json
 trunks:
   Fa0/1:
@@ -1405,7 +1129,7 @@ trunks:
 ---
 ### set
 
-Результат выполнения:
+Результат виконання:
 ```
 $ python cfg_gen.py templates/set.txt data_files/set.yml
 
@@ -1417,399 +1141,4 @@ interface Fa0/2
 
 interface Fa0/3
  switchport trunk allowed vlan remove 10
-
-```
-
----
-## include
-
----
-### include
-
-Выражение include позволяет добавить один шаблон в другой.
-
-Переменные, которые передаются как данные, должны содержать все данные и для основного шаблона, и для того, который добавлен через include.
-
----
-### include
-
-Шаблон templates/vlans.txt:
-```
-{% for vlan, name in vlans.items() %}
-vlan {{ vlan }}
- name {{ name }}
-{% endfor %}
-```
-
----
-### include
-
-Шаблон templates/ospf.txt:
-```
-router ospf 1
- auto-cost reference-bandwidth 10000
-{% for networks in ospf %}
- network {{ networks.network }} area {{ networks.area }}
-{% endfor %}
-```
-
----
-### include
-
-Шаблон templates/bgp.txt:
-```
-router bgp {{ bgp.local_as }}
-{% for ibgp in bgp.ibgp_neighbors %}
- neighbor {{ ibgp }} remote-as {{ bgp.local_as }}
- neighbor {{ ibgp }} update-source {{ bgp.loopback }}
-{% endfor %}
-{% for ebgp in bgp.ebgp_neighbors %}
- neighbor {{ ebgp }} remote-as {{ bgp.ebgp_neighbors[ebgp] }}
-{% endfor %}
-```
-
----
-### include
-
-Шаблон templates/switch.txt использует созданные шаблоны ospf и vlans:
-```
-{% include 'vlans.txt' %}
-
-{% include 'ospf.txt' %}
-```
-
----
-### include
-
-Файл с данными, для генерации конфигурации (data_files/switch.yml):
-```json
-vlans:
-  10: Marketing
-  20: Voice
-  30: Management
-ospf:
-  - network: 10.0.1.0 0.0.0.255
-    area: 0
-  - network: 10.0.2.0 0.0.0.255
-    area: 2
-  - network: 10.1.1.0 0.0.0.255
-    area: 0
-```
-
----
-### include
-
-Результат выполнения скрипта:
-```
-$ python cfg_gen.py templates/switch.txt data_files/switch.yml
-vlan 10
- name Marketing
-vlan 20
- name Voice
-vlan 30
- name Management
-
-router ospf 1
- auto-cost reference-bandwidth 10000
- network 10.0.1.0 0.0.0.255 area 0
- network 10.0.2.0 0.0.0.255 area 2
- network 10.1.1.0 0.0.0.255 area 0
-```
-
-Итоговая конфигурация получилась такой, как-будто строки из шаблонов ospf.txt и vlans.txt, находились в шаблоне switch.txt.
-
----
-### include
-
-
-Шаблон templates/router.txt:
-```
-{% include 'ospf.txt' %}
-
-{% include 'bgp.txt' %}
-
-logging {{ log_server }}
-```
-
-В данном случае, кроме include, добавлена ещё одна строка в шаблон, чтобы показать, что выражения include могут идти вперемешку с обычным шаблоном.
-
----
-### include
-
-Файл с данными (data_files/router.yml):
-```json
-ospf:
-  - network: 10.0.1.0 0.0.0.255
-    area: 0
-  - network: 10.0.2.0 0.0.0.255
-    area: 2
-  - network: 10.1.1.0 0.0.0.255
-    area: 0
-bgp:
-  local_as: 100
-  loopback: lo100
-  ibgp_neighbors:
-    - 10.0.0.2
-    - 10.0.0.3
-  ebgp_neighbors:
-    90.1.1.1: 500
-    80.1.1.1: 600
-log_server: 10.1.1.1
-```
-
----
-### include
-
-Результат выполнения скрипта будет таким:
-```
-$ python cfg_gen.py templates/router.txt data_files/router.yml
-router ospf 1
- auto-cost reference-bandwidth 10000
- network 10.0.1.0 0.0.0.255 area 0
- network 10.0.2.0 0.0.0.255 area 2
- network 10.1.1.0 0.0.0.255 area 0
-
-router bgp 100
- neighbor 10.0.0.2 remote-as 100
- neighbor 10.0.0.2 update-source lo100
- neighbor 10.0.0.3 remote-as 100
- neighbor 10.0.0.3 update-source lo100
- neighbor 90.1.1.1 remote-as 500
- neighbor 80.1.1.1 remote-as 600
-
-logging 10.1.1.1
-```
-
----
-## Наследование шаблонов
-
----
-### Наследование шаблонов
-
-Наследование шаблонов это очень мощный функционал, который позволяет избежать повторения одного и того же в разных шаблонов.
-
-При использовании наследования различают:
-* __базовый шаблон__ - это шаблон, в котором описывается каркас шаблона.
- * в этом шаблоне могут находится любые обычные выражения или текст. Но, кроме того, в этом шаблоне определяются специальные __блоки (block)__. 
-* __дочерний шаблон__ - шаблон, который расширяет базовый шаблон, заполняя обозначенные блоки.
- * дочерние шаблоны могут переписывать или дополнять блоки, определенные в базовом шаблоне.
-
----
-### Наследование шаблонов
-
-Пример базового шаблона templates/base_router.txt:
-```
-!
-{% block services %}
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-{% endblock %}
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
-{% block ospf %}
-router ospf 1
- auto-cost reference-bandwidth 10000
-{% endblock %}
-!
-{% block bgp %}
-{% endblock %}
-!
-{% block alias %}
-{% endblock %}
-!
-line con 0
- logging synchronous
- history size 100
-line vty 0 4
- logging synchronous
- history size 100
- transport input ssh
-!
-
-```
-
----
-### Наследование шаблонов
-
-Обратите внимание на четыре блока, которые созданы в шаблоне:
-```
-{% block services %}
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-{% endblock %}
-!
-{% block ospf %}
-router ospf 1
- auto-cost reference-bandwidth 10000
-{% endblock %}
-!
-{% block bgp %}
-{% endblock %}
-!
-{% block alias %}
-{% endblock %}
-```
-
-Это заготовки для соответствующих разделов конфигурации.
-Дочерний шаблон, который будет использовать этот базовый шаблон как основу, может заполнять все блоки или только какие-то из них.
-
----
-### Наследование шаблонов
-
-Дочерний шаблон templates/hq_router.txt:
-```
-{% extends "base_router.txt" %}
-
-{% block ospf %}
-{{ super() }}
-{% for networks in ospf %}
- network {{ networks.network }} area {{ networks.area }}
-{% endfor %}
-{% endblock %}
-
-{% block alias %}
-alias configure sh do sh
-alias exec ospf sh run | s ^router ospf
-alias exec bri show ip int bri | exc unass
-alias exec id show int desc
-alias exec top sh proc cpu sorted | excl 0.00%__0.00%__0.00%
-alias exec c conf t
-alias exec diff sh archive config differences nvram:startup-config system:running-config
-alias exec desc sh int desc | ex down
-{% endblock %}
-```
-
----
-### Наследование шаблонов
-
-Первая строка в шаблоне templates/hq_router.txt очень важна:
-```
-{% extends "base_router.txt" %}
-```
-
-Именно она говорит о том, что шаблон hq_router.txt будет построен на основе шаблона base_router.txt.
-
----
-### Наследование шаблонов
-
-Внутри дочернего шаблона всё происходит внутри блоков.
-Засчет блоков, которые были определены в базовом шаблоне, дочерний шаблон может расширять родительский шаблон.
-
-Обратите внимание, что те строки, которые описаны в дочернем шаблоне за пределами блоков, игнорируются.
-
----
-### Наследование шаблонов
-
-В базовом шаблоне три блока: ospf, bgp, alias.
-В дочернем шаблоне заполнены только два из них: ospf и alias.
-
-В этом удобство наследования. Не обязательно заполнять все блоки в каждом дочернем шаблоне.
-
----
-### Наследование шаблонов
-
-При этом, блоки ospf и alias используются по-разному.
-В базовом шаблоне, в блоке ospf уже была часть конфигурации:
-```
-{% block ospf %}
-router ospf 1
- auto-cost reference-bandwidth 10000
-{% endblock %}
-```
-
----
-### Наследование шаблонов
-
-Поэтому, в дочернем шаблоне есть выбор: использовать эту конфигурацию и дополнить её, или полностью переписать всё в дочернем шаблоне.
-
-В данном случае, конфигурация дополняется.
-
----
-### Наследование шаблонов
-
-Именно поэтому в дочернем шаблоне templates/hq_router.txt блок ospf начинается с выражения ```{{ super() }}```:
-```
-{% block ospf %}
-{{ super() }}
- {% for networks in ospf %}
- network {{ networks.network }} area {{ networks.area }}
- {% endfor %}
-{% endblock %}
-```
-
----
-### Наследование шаблонов
-
-{{ super() }} переносит в дочерний шаблон содержимое этого блока из родительского шаблона.
-Засчет этого, в дочерний шаблон перенесутся строки из родительского.
-
-Выражение super не обязательно должно находится в самом начале блока. Оно может быть в любом месте блока. Содержимое базового шаблона, перенесется в то место, где находится выражение super.
-
----
-### Наследование шаблонов
-
-В блоке alias просто описаны нужные alias.
-И, даже если бы в родительском шаблоне были какие-то настроки, они были бы затерты содержимым дочернего шаблона.
-
-Файл с данными для генерации конфигурации по шаблону (data_files/hq_router.yml):
-```json
-ospf:
-  - network: 10.0.1.0 0.0.0.255
-    area: 0
-  - network: 10.0.2.0 0.0.0.255
-    area: 2
-  - network: 10.1.1.0 0.0.0.255
-    area: 0
-```
-
----
-### Наследование шаблонов
-
-Результат выполнения будет таким:
-```
-$ python cfg_gen.py templates/hq_router.txt data_files/hq_router.yml
-!
-service timestamps debug datetime msec localtime show-timezone year
-service timestamps log datetime msec localtime show-timezone year
-service password-encryption
-service sequence-numbers
-!
-no ip domain lookup
-!
-ip ssh version 2
-!
-router ospf 1
- auto-cost reference-bandwidth 10000
-
- network 10.0.1.0 0.0.0.255 area 0
- network 10.0.2.0 0.0.0.255 area 2
- network 10.1.1.0 0.0.0.255 area 0
-!
-!
-alias configure sh do sh
-alias exec ospf sh run | s ^router ospf
-alias exec bri show ip int bri | exc unass
-alias exec id show int desc
-alias exec top sh proc cpu sorted | excl 0.00%__0.00%__0.00%
-alias exec c conf t
-alias exec diff sh archive config differences nvram:startup-config system:running-config
-alias exec desc sh int desc | ex down
-!
-line con 0
- logging synchronous
- history size 100
-line vty 0 4
- logging synchronous
- history size 100
- transport input ssh
-!
-
-
 ```
