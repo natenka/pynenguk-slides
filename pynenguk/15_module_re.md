@@ -284,81 +284,23 @@ Out[89]: {'int1': 'Gi0/5', 'int2': 'Gi0/15', 'mac': 'f03a.b216.7ad7', 'vlan': '1
 
 
 ---
-## ```re.search()```
+## ```re.search```
 
 ---
-### ```re.search()```
+### ```re.search```
 
-Функция ```search()```:
-* используется для поиска подстроки, которая соответствует шаблону
-* возвращает объект Match, если подстрока найдена
-* возвращает ```None```, если подстрока не найдена
+Функція ``search``:
+* використовується для пошуку підрядка, який відповідає шаблону
+* повертає об'єкт Match, якщо підрядок знайдено
+* повертає ``None``, якщо підрядок не знайдено
 
-Функция search подходит в том случае, когда надо найти только одно совпадение в строке, например, когда регулярное выражение описывает всю строку или часть строки.
+Функція search підходить у тому випадку, коли треба знайти лише один збіг у рядку.
 
-
----
-### ```re.search()```
-
-В файле log.txt находятся лог-сообщения с информацией о том, что один и тот же MAC слишком быстро переучивается то на одном, то на другом интерфейсе.
-Одна из причин таких сообщений - петля в сети.
-
-Содержимое файла log.txt:
-```
-%SW_MATM-4-MACFLAP_NOTIF: Host 01e2.4c18.0156 in vlan 10 is flapping between port Gi0/16 and port Gi0/24
-%SW_MATM-4-MACFLAP_NOTIF: Host 01e2.4c18.0156 in vlan 10 is flapping between port Gi0/16 and port Gi0/24
-%SW_MATM-4-MACFLAP_NOTIF: Host 01e2.4c18.0156 in vlan 10 is flapping between port Gi0/24 and port Gi0/19
-%SW_MATM-4-MACFLAP_NOTIF: Host 01e2.4c18.0156 in vlan 10 is flapping between port Gi0/24 and port Gi0/16
-```
 
 ---
-### ```re.search()```
+### ```re.search```
 
-При этом, MAC-адрес может прыгать между несколькими портами.
-В таком случае очень важно знать, с каких портов прилетает MAC.
-И, если это вызвано петлей, выключить все порты, кроме одного.
 
-Попробуем вычислить, между какими портами и в каком VLAN образовалась проблема.
-
----
-### ```re.search()```
-
-Проверка регулярного выражения с одной строкой из log-файла:
-```python
-In [1]: import re
-
-In [2]: log = '%SW_MATM-4-MACFLAP_NOTIF: Host 01e2.4c18.0156 in vlan 10 is flapping between port Gi0/16 and port Gi0/24'
-
-In [3]: match = re.search('Host \S+ '
-   ...:                   'in vlan (\d+) '
-   ...:                   'is flapping between port '
-   ...:                   '(\S+) and port (\S+)', log)
-   ...:
-
-```
-
----
-### ```re.search()```
-
-Регулярное выражение для удобства чтения разбито на части.
-В нем есть три группы:
-* ```(\d+)``` - описывает номер VLAN
-* ```(\S+) and port (\S+)``` - в это выражение попадают номера портов
-
----
-### ```re.search()```
-
-В итоге, в группы попали такие части строки:
-```python
-In [4]: match.groups()
-Out[4]: ('10', 'Gi0/16', 'Gi0/24')
-```
-
----
-### ```re.search()```
-
-В итоговом скрипте файл log.txt обрабатывается построчно, и из каждой строки собирается информация о портах.
-Так как порты могут дублироваться, сразу добавляем их в множество, чтобы получить подборку уникальных интерфейсов (файл parse_log_search.py):
 ```python
 import re
 
@@ -377,328 +319,45 @@ with open('log.txt') as f:
             ports.add(match.group(2))
             ports.add(match.group(3))
 
-print('Петля между портами {} в VLAN {}'.format(', '.join(ports), vlan))
-
+print('Петля між портами {} у VLAN {}'.format(', '.join(ports), vlan))
 ```
 
 ---
-### ```re.search()```
-
-Результат выполнения скрипта такой:
-```
-$ python parse_log_search.py
-Петля между портами Gi0/19, Gi0/24, Gi0/16 в VLAN 10
-```
+## ```re.finditer```
 
 ---
-### Обработка вывода show cdp neighbors detail
+### ```re.finditer```
 
-Попробуем получить параметры устройств из вывода sh cdp neighbors detail.
+Функція ```finditer```:
+* використовується для пошуку всіх неперекриваючих збігів у шаблоні
+* повертає ітератор з об’єктами Match
 
-Пример вывода информации для одного соседа:
-```
-SW1#show cdp neighbors detail
--------------------------
-Device ID: SW2
-Entry address(es):
-  IP address: 10.1.1.2
-Platform: cisco WS-C2960-8TC-L,  Capabilities: Switch IGMP
-Interface: GigabitEthernet1/0/16,  Port ID (outgoing port): GigabitEthernet0/1
-Holdtime : 164 sec
+Функція finditer чудово підходить для обробки тих команд, вивід яких відображається у стовпцях.
+Наприклад, sh ip int br, sh mac address-table тощо.
+У цьому випадку його можна застосувати до всього виводу команди.
 
-Version :
-Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(55)SE9, RELEASE SOFTWARE (fc1)
-Technical Support: http://www.cisco.com/techsupport
-Copyright (c) 1986-2014 by Cisco Systems, Inc.
-Compiled Mon 03-Mar-14 22:53 by prod_rel_team
-
-advertisement version: 2
-VTP Management Domain: ''
-Native VLAN: 1
-Duplex: full
-Management address(es):
-  IP address: 10.1.1.2
-
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Задача получить такие поля:
-* имя соседа (Device ID: SW2)
-* IP-адрес соседа (IP address: 10.1.1.2)
-* платформу соседа (Platform: cisco WS-C2960-8TC-L)
-* версию IOS (Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(55)SE9, RELEASE SOFTWARE (fc1))
-
----
-### Обработка вывода show cdp neighbors detail
-
-И, для удобства, надо получить данные в виде словаря.
-Пример итогового словаря для коммутатора SW2:
-```python
-{'SW2': {'ip': '10.1.1.2',
-         'platform': 'cisco WS-C2960-8TC-L',
-         'ios': 'C2960 Software (C2960-LANBASEK9-M), Version 12.2(55)SE9'}}
-```
-
-
----
-### Обработка вывода show cdp neighbors detail
-
-Файл parse_sh_cdp_neighbors_detail_ver1.py
-```python
-import re
-from pprint import pprint
-
-
-def parse_cdp(filename):
-    result = {}
-
-    with open(filename) as f:
-        for line in f:
-            if line.startswith('Device ID'):
-                neighbor = re.search('Device ID: (\S+)', line).group(1)
-                result[neighbor] = {}
-            elif line.startswith('  IP address'):
-                ip = re.search('IP address: (\S+)', line).group(1)
-                result[neighbor]['ip'] = ip
-            elif line.startswith('Platform'):
-                platform = re.search('Platform: (\S+ \S+),', line).group(1)
-                result[neighbor]['platform'] = platform
-            elif line.startswith('Cisco IOS Software'):
-                ios = re.search('Cisco IOS Software, (.+), RELEASE', line).group(1)
-                result[neighbor]['ios'] = ios
-
-    return result
-
-pprint(parse_cdp('sh_cdp_neighbors_sw1.txt'))
-
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Результат выглядит так:
-```python
-$ python parse_sh_cdp_neighbors_detail_ver1.py
-{'R1': {'ios': '3800 Software (C3825-ADVENTERPRISEK9-M), Version 12.4(24)T1',
-        'ip': '10.1.1.1',
-        'platform': 'Cisco 3825'},
- 'R2': {'ios': '2900 Software (C3825-ADVENTERPRISEK9-M), Version 15.2(2)T1',
-        'ip': '10.2.2.2',
-        'platform': 'Cisco 2911'},
- 'SW2': {'ios': 'C2960 Software (C2960-LANBASEK9-M), Version 12.2(55)SE9',
-         'ip': '10.1.1.2',
-         'platform': 'cisco WS-C2960-8TC-L'}}
-
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Файл parse_sh_cdp_neighbors_detail_ver2.py:
-```python
-import re
-from pprint import pprint
-
-
-def parse_cdp(filename):
-    regex = ('Device ID: (?P<device>\S+)'
-             '|IP address: (?P<ip>\S+)'
-             '|Platform: (?P<platform>\S+ \S+),'
-             '|Cisco IOS Software, (?P<ios>.+), RELEASE')
-
-    result = {}
-
-    with open('sh_cdp_neighbors_sw1.txt') as f:
-        for line in f:
-            match = re.search(regex, line)
-            if match:
-                if match.lastgroup == 'device':
-                    device = match.group(match.lastgroup)
-                    result[device] = {}
-                elif device:
-                    result[device][match.lastgroup] = match.group(match.lastgroup)
-
-    return result
-
-pprint(parse_cdp('sh_cdp_neighbors_sw1.txt'))
-
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Пояснения ко второму варианту:
-* в регулярном выражении описаны все варианты строк через знак или ```|```
-* без проверки строки ищется совпадение
-* если совпадение найдено, проверяется метод lastgroup
-  * метод lastgroup возвращает имя последней именованной группы в регулярном выражении, для которой было найдено совпадение
-  * если было найдено совпадение для группы device, в переменную device записывается значение, которое попало в эту группу
-  * иначе в словарь записывается соответствие 'имя группы': соответствующее значение
-
----
-### Обработка вывода show cdp neighbors detail
-
-У этого решения ограничение в том, что подразумевается, что в каждой строке может быть только одно совпадение. И в регулярных выражениях, которые записаны через знак ```|```, может быть только одна группа.
-Это можно исправить, расширив решение.
-
----
-### Обработка вывода show cdp neighbors detail
-
-Результат будет таким же:
-```python
-$ python parse_sh_cdp_neighbors_detail_ver2.py
-{'R1': {'ios': '3800 Software (C3825-ADVENTERPRISEK9-M), Version 12.4(24)T1',
-        'ip': '10.1.1.1',
-        'platform': 'Cisco 3825'},
- 'R2': {'ios': '2900 Software (C3825-ADVENTERPRISEK9-M), Version 15.2(2)T1',
-        'ip': '10.2.2.2',
-        'platform': 'Cisco 2911'},
- 'SW2': {'ios': 'C2960 Software (C2960-LANBASEK9-M), Version 12.2(55)SE9',
-         'ip': '10.1.1.2',
-         'platform': 'cisco WS-C2960-8TC-L'}}
-
-```
-
-
----
-## ```re.match()```
-
----
-### ```re.match()```
-
-Функция ```match()```:
-* используется для поиска в начале строки подстроки, которая соответствует шаблону
-* возвращает объект Match, если подстрока найдена
-* возвращает ```None```, если подстрока не найдена
-
----
-### ```re.match()```
-
-Функция match отличается от search тем, что match всегда ищет совпадение в начале строки.
-Например, если повторить пример, который использовался для функции search, но уже с match:
-```python
-In [2]: import re
-
-In [3]: log = '%SW_MATM-4-MACFLAP_NOTIF: Host 01e2.4c18.0156 in vlan 10 is flapping between port Gi0/16 and port Gi0/24'
-
-In [4]: match = re.match('Host \S+ '
-   ...:                  'in vlan (\d+) '
-   ...:                  'is flapping between port '
-   ...:                  '(\S+) and port (\S+)', log)
-   ...:
-```
-
----
-### ```re.match()```
-
-Результатом будет None:
-```python
-In [6]: print(match)
-None
-
-```
-
-Так получилось из-за того, что match ищет слово Host в начале строки.
-Но это сообщение находится в середине.
-
----
-### ```re.match()```
-
-В данном случае можно легко исправить выражение, чтобы функция match находила совпадение:
-```python
-In [4]: match = re.match('\S+: Host \S+ '
-   ...:                  'in vlan (\d+) '
-   ...:                  'is flapping between port '
-   ...:                  '(\S+) and port (\S+)', log)
-   ...:
-
-```
-
----
-### ```re.match()```
-
-Перед словом Host добавлено выражение ```\S+: ```. Теперь совпадение будет найдено:
-```python
-In [11]: print(match)
-<_sre.SRE_Match object; span=(0, 104), match='%SW_MATM-4-MACFLAP_NOTIF: Host 01e2.4c18.0156 in >
-
-In [12]: match.groups()
-Out[12]: ('10', 'Gi0/16', 'Gi0/24')
-```
-
----
-### ```re.match()```
-
-Пример аналогичен тому, который использовался в функции search, с небольшими изменениями (файл parse_log_match.py):
-```python
-import re
-
-regex = ('\S+: Host \S+ '
-         'in vlan (\d+) '
-         'is flapping between port '
-         '(\S+) and port (\S+)')
-
-ports = set()
-
-with open('log.txt') as f:
-    for line in f:
-        match = re.match(regex, line)
-        if match:
-            vlan = match.group(1)
-            ports.add(match.group(2))
-            ports.add(match.group(3))
-
-print('Петля между портами {} в VLAN {}'.format(', '.join(ports), vlan))
-
-```
-
----
-### ```re.match()```
-
-Результат:
-```
-$ python parse_log_match.py
-Петля между портами Gi0/19, Gi0/24, Gi0/16 в VLAN 10
-```
-
-
----
-## ```re.finditer()```
 
 ---
 ### ```re.finditer()```
 
-Функция ```finditer()```:
-* используется для поиска всех непересекающихся совпадений в шаблоне
-* возвращает итератор с объектами Match
-
-Функция finditer отлично подходит для обработки тех команд, вывод которых отображается столбцами.
-Например, sh ip int br, sh mac address-table и др.
-В этом случае его можно применять ко всему выводу команды.
-
----
-### ```re.finditer()```
-
-Пример вывода sh ip int br:
+Приклад  sh ip int br:
 ```python
 In [8]: sh_ip_int_br = '''
-   ...: R1#show ip interface brief
-   ...: Interface             IP-Address      OK? Method Status           Protocol
-   ...: FastEthernet0/0       15.0.15.1       YES manual up               up
-   ...: FastEthernet0/1       10.0.12.1       YES manual up               up
-   ...: FastEthernet0/2       10.0.13.1       YES manual up               up
-   ...: FastEthernet0/3       unassigned      YES unset  up               up
-   ...: Loopback0             10.1.1.1        YES manual up               up
-   ...: Loopback100           100.0.0.1       YES manual up               up
-   ...: '''
+R1#show ip interface brief
+Interface             IP-Address      OK? Method Status           Protocol
+FastEthernet0/0       15.0.15.1       YES manual up               up
+FastEthernet0/1       10.0.12.1       YES manual up               up
+FastEthernet0/2       10.0.13.1       YES manual up               up
+FastEthernet0/3       unassigned      YES unset  up               up
+Loopback0             10.1.1.1        YES manual up               up
+Loopback100           100.0.0.1       YES manual up               up
+'''
 ```
 
 ---
 ### ```re.finditer()```
 
-Регулярное выражение для обработки вывода:
+Регулярний вираз для обробки виводу:
 ```python
 In [9]: result = re.finditer('(\S+) +'
    ...:                      '([\d.]+) +'
@@ -712,7 +371,7 @@ In [9]: result = re.finditer('(\S+) +'
 ---
 ### ```re.finditer()```
 
-В переменной result находится итератор:
+Змінна результату містить ітератор:
 ```python
 In [12]: result
 Out[12]: <callable_iterator at 0xb583f46c>
@@ -721,7 +380,7 @@ Out[12]: <callable_iterator at 0xb583f46c>
 ---
 ### ```re.finditer()```
 
-В итераторе находятся объекты Match:
+Ітератор містить об’єкти Match:
 ```python
 In [16]: groups = []
 
@@ -739,7 +398,7 @@ In [18]: for match in result:
 ---
 ### ```re.finditer()```
 
-Теперь в списке groups находятся кортежи со строками, которые попали в группы:
+Тепер у списку groups знаходяться кортежі з рядками, які потрапили до груп:
 ```python
 In [19]: groups
 Out[19]:
@@ -754,7 +413,7 @@ Out[19]:
 ---
 ### ```re.finditer()```
 
-Аналогичный результат можно получить с помощью генератора списков:
+Такий результат можна отримати за допомогою генератора списків:
 ```python
 In [20]: regex = '(\S+) +([\d.]+) +\w+ +\w+ +(up|down|administratively down) +(up|down)'
 
@@ -771,160 +430,23 @@ Out[22]:
 ```
 
 ---
-### ```re.finditer()```
-
-Теперь разберем тот же лог-файл, который использовался в подразделах search и match.
-
-В этом случае вывод можно не перебирать построчно, а передать все содержимое файла (файл parse_log_finditer.py): 
-```python
-import re
-
-regex = ('Host \S+ '
-         'in vlan (\d+) '
-         'is flapping between port '
-         '(\S+) and port (\S+)')
-
-ports = set()
-
-with open('log.txt') as f:
-    for m in re.finditer(regex, f.read()):
-        vlan = m.group(1)
-        ports.add(m.group(2))
-        ports.add(m.group(3))
-
-print('Петля между портами {} в VLAN {}'.format(', '.join(ports), vlan))
-
-```
-
----
-### ```re.finditer()```
-
-> В реальной жизни log-файл может быть очень большим. В таком случае, его лучше обрабатывать построчно. 
-
-Вывод будет таким же:
-```
-$ python parse_log_finditer.py
-Петля между портами Gi0/19, Gi0/24, Gi0/16 в VLAN 10
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Файл parse_sh_cdp_neighbors_detail_finditer.py:
-```python
-import re
-from pprint import pprint
-
-def parse_cdp(filename):
-    regex = ('Device ID: (?P<device>\S+)'
-             '|IP address: (?P<ip>\S+)'
-             '|Platform: (?P<platform>\S+ \S+),'
-             '|Cisco IOS Software, (?P<ios>.+), RELEASE')
-
-    result = {}
-
-    with open('sh_cdp_neighbors_sw1.txt') as f:
-        match_iter = re.finditer(regex, f.read())
-        for match in match_iter:
-            if match.lastgroup == 'device':
-                device = match.group(match.lastgroup)
-                result[device] = {}
-            elif device:
-                result[device][match.lastgroup] = match.group(match.lastgroup)
-    return result
-
-pprint(parse_cdp('sh_cdp_neighbors_sw1.txt'))
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Теперь совпадения ищутся во всем файле, а не в каждой строке отдельно:
-```python
-    with open('sh_cdp_neighbors_sw1.txt') as f:
-        match_iter = re.finditer(regex, f.read())
-```
-
-Затем перебираются совпадения:
-```python
-    with open('sh_cdp_neighbors_sw1.txt') as f:
-        match_iter = re.finditer(regex, f.read())
-        for match in match_iter:
-
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Результат будет таким:
-```python
-$ python parse_sh_cdp_neighbors_detail_finditer.py
-{'R1': {'ios': '3800 Software (C3825-ADVENTERPRISEK9-M), Version 12.4(24)T1',
-        'ip': '10.1.1.1',
-        'platform': 'Cisco 3825'},
- 'R2': {'ios': '2900 Software (C3825-ADVENTERPRISEK9-M), Version 15.2(2)T1',
-        'ip': '10.2.2.2',
-        'platform': 'Cisco 2911'},
- 'SW2': {'ios': 'C2960 Software (C2960-LANBASEK9-M), Version 12.2(55)SE9',
-         'ip': '10.1.1.2',
-         'platform': 'cisco WS-C2960-8TC-L'}}
-
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Хотя результат аналогичный, с finditer больше возможностей, так как можно указывать не только то, что должно находиться в нужной строке, но и в строках вокруг.
-
----
-### Обработка вывода show cdp neighbors detail
-
-Например, можно точнее указать, какой именно IP-адрес надо взять:
-```
-Device ID: SW2
-Entry address(es):
-  IP address: 10.1.1.2
-Platform: cisco WS-C2960-8TC-L,  Capabilities: Switch IGMP
-
-...
-
-Native VLAN: 1
-Duplex: full
-Management address(es):
-  IP address: 10.1.1.2
-```
-
----
-### Обработка вывода show cdp neighbors detail
-
-Например, если нужно взять первый IP-адрес, можно так дополнить регулярное выражение:
-```python
-regex = ('Device ID: (?P<device>\S+)'
-         '|Entry address.*\n +IP address: (?P<ip>\S+)'
-         '|Platform: (?P<platform>\S+ \S+),'
-         '|Cisco IOS Software, (?P<ios>.+), RELEASE')
-```
-
-
-
----
 ## ```re.findall()```
 
 
 ---
 ### ```re.findall()```
 
-Функция ```findall()```:
-* используется для поиска всех непересекающихся совпадений в шаблоне
-* возвращает:
-  * список строк, которые описаны регулярным выражением, если в регулярном выражении нет групп
-  * список строк, которые совпали с регулярным выражением в группе, если в регулярном выражении одна группа
-  * список кортежей, в которых находятся строки, которые совпали с выражением в группе, если групп несколько
+Функція ```findall()'':
+* використовується для пошуку всіх неперекриваючих збігів у шаблоні
+* повертає:
+  * список рядків, які описуються регулярним виразом, якщо в регулярному виразі немає груп
+  * список рядків, які відповідають регулярному виразу в групі, якщо в регулярному виразі є одна група
+  * список кортежів, що містять рядки, які відповідають виразу в групі, якщо груп декілька
+
 
 ---
 ### ```re.findall()```
 
-Рассмотрим работу findall на примере вывода команды sh mac address-table:
 ```python
 In [2]: mac_address_table = open('CAM_table.txt').read()
 
@@ -952,6 +474,13 @@ Vlan    Mac Address       Type        Ports
 В этом случае findall возвращает список строк, которые совпали с регулярным выражением.
 
 Например, с помощью findall можно получить список строк с соответствиями vlan - mac - interface и избавиться от заголовка в выводе команды:
+
+
+Перший приклад — регулярний вираз без груп.
+У цьому випадку findall повертає список рядків, які відповідають регулярному виразу.
+
+Наприклад, використовуючи findalд, можна отримати список рядків з зіставленням vlan – mac – interface і позбутися заголовка у виведенні команди:
+
 ```python
 In [4]: re.findall('\d+ +\S+ +\w+ +\S+', mac_address_table)
 Out[4]:
@@ -964,17 +493,11 @@ Out[4]:
  '300    aa0b.cc70.7000    DYNAMIC     Gi0/7']
 ```
 
----
-### ```re.findall()```
-
-Обратите внимание, что findall возвращает список строк, а не объект Match.
-
-Но как только в регулярном выражении появляется группа, findall ведет себя по-другому.
 
 ---
 ### ```re.findall()```
 
-Если в выражении используется одна группа, findall возвращает список строк, которые совпали с выражением в группе:
+Якщо вираз використовує одну групу, findall повертає список рядків, які відповідають виразу в групі:
 ```python
 In [5]: re.findall('\d+ +(\S+) +\w+ +\S+', mac_address_table)
 Out[5]:
@@ -987,12 +510,12 @@ Out[5]:
  'aa0b.cc70.7000']
 ```
 
-При этом findall ищет совпадение всей строки, но возвращает результат, похожий на метод groups() в объекте Match.
+У цьому випадку findall шукає збіг всього рядка, але повертає результат, подібний до методу groups() об’єкта Match.
 
 ---
 ### ```re.findall()```
 
-Если же групп несколько, findall вернет список кортежей:
+Якщо є кілька груп, findall поверне список кортежів:
 ```python
 In [6]: re.findall('(\d+) +(\S+) +\w+ +(\S+)', mac_address_table)
 Out[6]:
@@ -1006,256 +529,18 @@ Out[6]:
 
 ```
 
-Если такие особенности работы функции findall мешают получить необходимый результат, то лучше использовать фукнцию finditer.
-Но иногда такое поведение подходит и удобно использовать.
+Якщо такі особливості функції findall заважають отримати бажаний результат, то краще скористатися функцією finditer.
+Але іноді така поведінка є доречною та зручною у використанні.
 
 ---
-### ```re.findall()```
-
-
-Пример использования findall в разборе лог-файла (файл parse_log_findall.py):
-```python
-import re
-
-regex = ('Host \S+ '
-         'in vlan (\d+) '
-         'is flapping between port '
-         '(\S+) and port (\S+)')
-
-ports = set()
-
-with open('log.txt') as f:
-    result = re.findall(regex, f.read())
-    for vlan, port1, port2 in result:
-        ports.add(port1)
-        ports.add(port2)
-
-print('Петля между портами {} в VLAN {}'.format(', '.join(ports), vlan))
-```
+## Прапори
 
 ---
-### ```re.findall()```
+### Прапори
 
-Результат:
-```
-$ python parse_log_findall.py
-Петля между портами Gi0/19, Gi0/16, Gi0/24 в VLAN 10
+Під час використання функцій або створення скомпільованого регулярного виразу можна вказати додаткові позначки, які впливають на поведінку регулярного виразу.
 
-```
-
-
----
-## ```re.compile()```
-
----
-### ```re.compile()```
-
-В Python есть возможность заранее скомпилировать регулярное выражение, а затем использовать его. Это особенно полезно в тех случаях, когда регулярное выражение много используется в скрипте.
-
-Использование компилированного выражения может ускорить обработку, и, как правило, такой вариант удобней использовать, так как в программе разделяется создание регулярного выражения и его использование.
-Кроме того, при использовании функции re.compile создается объект RegexObject, у которого есть несколько дополнительных возможностей, которых нет в объекте MatchObject.
-
----
-### ```re.compile()```
-
-Для компиляции регулярного выражения используется функция re.compile:
-```python
-In [52]: regex = re.compile('\d+ +\S+ +\w+ +\S+')
-
-```
-
----
-### ```re.compile()```
-
-Она возвращает объект RegexObject:
-```python
-In [53]: regex
-Out[53]: re.compile(r'\d+ +\S+ +\w+ +\S+', re.UNICODE)
-
-```
-
----
-### ```re.compile()```
-
-У объекта RegexObject доступны такие методы и атрибуты:
-```python
-In [55]: [ method for method in dir(regex) if not method.startswith('_')]
-Out[55]:
-['findall',
- 'finditer',
- 'flags',
- 'fullmatch',
- 'groupindex',
- 'groups',
- 'match',
- 'pattern',
- 'scanner',
- 'search',
- 'split',
- 'sub',
- 'subn']
-```
-
----
-### ```re.compile()```
-
-Обратите внимание, что у объекта Regex доступны методы search, match, finditer, findall. Это те же функции, которые доступны в модуле глобально, но теперь их надо применять к объекту.
-
-Пример использования метода search:
-```python
-In [67]: line = ' 100    a1b2.ac10.7000    DYNAMIC     Gi0/1'
-
-In [68]: match = regex.search(line)
-```
-
-Теперь search надо вызывать как метод объекта regex.
-И передать как аргумент строку.
-
----
-### ```re.compile()```
-
-Результатом будет объект Match:
-```python
-In [69]: match
-Out[69]: <_sre.SRE_Match object; span=(1, 43), match='100    a1b2.ac10.7000    DYNAMIC     Gi0/1'>
-
-In [70]: match.group()
-Out[70]: '100    a1b2.ac10.7000    DYNAMIC     Gi0/1'
-
-```
-
----
-### ```re.compile()```
-
-Пример компиляции регулярного выражения и его использования на примере разбора лог-файла (файл parse_log_compile.py):
-```python
-import re
-
-regex = re.compile('Host \S+ '
-                   'in vlan (\d+) '
-                   'is flapping between port '
-                   '(\S+) and port (\S+)')
-
-ports = set()
-
-with open('log.txt') as f:
-    for m in regex.finditer(f.read()):
-        vlan = m.group(1)
-        ports.add(m.group(2))
-        ports.add(m.group(3))
-
-print('Петля между портами {} в VLAN {}'.format(', '.join(ports), vlan))
-
-```
-
----
-### ```re.compile()```
-
-Это модифицированный пример с использованием finditer.
-Тут изменилось описание регулярного выражения:
-```python
-regex = re.compile('Host \S+ '
-                   'in vlan (\d+) '
-                   'is flapping between port '
-                   '(\S+) and port (\S+)')
-```
-
-
-И вызов finditer теперь выполняется как метод объекта regex:
-```python
-    for m in regex.finditer(f.read()):
-```
-
----
-### Параметры, которые доступны только при использовании re.compile
-
-При использовании функции re.compile в методах search, match, findall, finditer и fullmatch появляются дополнительные параметры:
-* pos - позволяет указывать индекс в строке, с которого надо начать искать совпадение
-* endpos - указывает, до какого индекса надо выполнять поиск
-
-Их использование аналогично выполнению среза строки.
-
----
-### Параметры, которые доступны только при использовании re.compile
-
-Например, таким будет результат без указания параметров pos, endpos:
-```python
-In [75]: regex = re.compile(r'\d+ +\S+ +\w+ +\S+')
-
-In [76]: line = ' 100    a1b2.ac10.7000    DYNAMIC     Gi0/1'
-
-In [77]: match = regex.search(line)
-
-In [78]: match.group()
-Out[78]: '100    a1b2.ac10.7000    DYNAMIC     Gi0/1'
-
-```
-
----
-### Параметры, которые доступны только при использовании re.compile
-
-В этом случае указывается начальная позиция поиска:
-```
-In [79]: match = regex.search(line, 2)
-
-In [80]: match.group()
-Out[80]: '00    a1b2.ac10.7000    DYNAMIC     Gi0/1'
-```
-
----
-### Параметры, которые доступны только при использовании re.compile
-
-Указание начальной позиции аналогично срезу строки:
-```python
-In [81]: match = regex.search(line[2:])
-
-In [82]: match.group()
-Out[82]: '00    a1b2.ac10.7000    DYNAMIC     Gi0/1'
-
-```
-
----
-### Параметры, которые доступны только при использовании re.compile
-
-И последний пример, с указанием двух индексов:
-```python
-In [90]: line = ' 100    a1b2.ac10.7000    DYNAMIC     Gi0/1'
-
-In [91]: regex = re.compile(r'\d+ +\S+ +\w+ +\S+')
-
-In [92]: match = regex.search(line, 2, 40)
-
-In [93]: match.group()
-Out[93]: '00    a1b2.ac10.7000    DYNAMIC     Gi'
-
-```
-
----
-### Параметры, которые доступны только при использовании re.compile
-
-И аналогичный срез строки:
-```python
-In [94]: match = regex.search(line[2:40])
-
-In [95]: match.group()
-Out[95]: '00    a1b2.ac10.7000    DYNAMIC     Gi'
-
-```
-
-В методах  match, findall, finditer и fullmatch параметры pos и endpos работают аналогично.
-
-
-
-
----
-## Флаги
-
----
-### Флаги
-
-При использовании функций или создании скомпилированного регулярного выражения можно указывать дополнительные флаги, которые влияют на поведение регулярного выражения.
-
-Модуль re поддерживает такие флаги (в скобках короткий вариант обозначения флага):
+Модуль re підтримує наступні прапори (у дужках наведено коротку версію позначення прапора):
 * re.ASCII (re.A)
 * re.IGNORECASE (re.I)
 * re.MULTILINE (re.M)
@@ -1264,99 +549,6 @@ Out[95]: '00    a1b2.ac10.7000    DYNAMIC     Gi'
 * re.LOCALE (re.L)
 * re.DEBUG
 
----
-### re.DOTALL
-
-С помощью регулярных выражений можно работать и с многострочной строкой.
-
-Например, из строки table надо получить только строки с соответствиями VLAN-MAC-interface:
-
-```python
-In [11]: table = '''
-    ...: sw1#sh mac address-table
-    ...:           Mac Address Table
-    ...: -------------------------------------------
-    ...:
-    ...: Vlan    Mac Address       Type        Ports
-    ...: ----    -----------       --------    -----
-    ...:  100    aabb.cc10.7000    DYNAMIC     Gi0/1
-    ...:  200    aabb.cc20.7000    DYNAMIC     Gi0/2
-    ...:  300    aabb.cc30.7000    DYNAMIC     Gi0/3
-    ...:  100    aabb.cc40.7000    DYNAMIC     Gi0/4
-    ...:  500    aabb.cc50.7000    DYNAMIC     Gi0/5
-    ...:  200    aabb.cc60.7000    DYNAMIC     Gi0/6
-    ...:  300    aabb.cc70.7000    DYNAMIC     Gi0/7
-    ...: '''
-```
-
----
-### re.DOTALL
-
-В этом выражении описана строка с MAC-адресом:
-
-```python
-In [12]: m = re.search(' *\d+ +[a-f0-9.]+ +\w+ +\S+', table)
-```
-
-В результат попадет первая строка с MAC-адресом:
-
-```python
-In [13]: m.group()
-Out[13]: ' 100    aabb.cc80.7000    DYNAMIC     Gi0/1'
-```
-
----
-### re.DOTALL
-
-Учитывая то, что по умолчанию регулярные выражения жадные, можно получить все соответствия таким образом:
-
-```python
-In [14]: m = re.search('( *\d+ +[a-f0-9.]+ +\w+ +\S+\n)+', table)
-
-In [15]: print(m.group())
- 100    aabb.cc10.7000    DYNAMIC     Gi0/1
- 200    aabb.cc20.7000    DYNAMIC     Gi0/2
- 300    aabb.cc30.7000    DYNAMIC     Gi0/3
- 100    aabb.cc40.7000    DYNAMIC     Gi0/4
- 500    aabb.cc50.7000    DYNAMIC     Gi0/5
- 200    aabb.cc60.7000    DYNAMIC     Gi0/6
- 300    aabb.cc70.7000    DYNAMIC     Gi0/7
-```
-
----
-### re.DOTALL
-
-Тут описана строка с MAC-адресом, перевод строки, и указано, что это выражение должно повторяться, как минимум, один раз.
-
-Получается, что в данном случае надо получить все строки, начиная с первого соответствия VLAN-MAC-интерфейс.
-
-Это можно описать таким образом:
-
-```python
-In [16]: m = re.search(' *\d+ +[a-f0-9.]+ +\w+ +\S+.*', table)
-
-In [17]: print(m.group())
- 100    aabb.cc10.7000    DYNAMIC     Gi0/1
-```
-
----
-### re.DOTALL
-
-Пока что в результате только одна строка, так как по умолчанию точка не включает в себя перевод строки.  
-Но, если добавить специальный флаг, re.DOTALL, точка будет включать и перевод строки, и в результат попадут все соответствия:
-
-```python
-In [18]: m = re.search(' *\d+ +[a-f0-9.]+ +\w+ +\S+.*', table, re.DOTALL)
-
-In [19]: print(m.group())
- 100    aabb.cc10.7000    DYNAMIC     Gi0/1
- 200    aabb.cc20.7000    DYNAMIC     Gi0/2
- 300    aabb.cc30.7000    DYNAMIC     Gi0/3
- 100    aabb.cc40.7000    DYNAMIC     Gi0/4
- 500    aabb.cc50.7000    DYNAMIC     Gi0/5
- 200    aabb.cc60.7000    DYNAMIC     Gi0/6
- 300    aabb.cc70.7000    DYNAMIC     Gi0/7
-```
 
 ---
 ## re.split
@@ -1364,10 +556,10 @@ In [19]: print(m.group())
 ---
 ### re.split
 
-Функция split работает аналогично методу split в строках.  
-Но в функции re.split можно использовать регулярные выражения, а значит, разделять строку на части по более сложным условиям.
+Функція split працює подібно до методу split на рядках.  
+Але у функції re.split ви можете використовувати регулярні вирази, що означає, що ви можете розділити рядок на частини відповідно до складніших умов.
 
-Например, строку ospf\_route надо разбить на элементы по пробелам \(как в методе str.split\):
+Наприклад, рядок ospf_route має бути розбитий на елементи пробілами (як у методі str.split):
 
 ```python
 In [1]: ospf_route = 'O     10.0.24.0/24 [110/41] via 10.0.13.3, 3d18h, FastEthernet0/0'
@@ -1386,7 +578,7 @@ Out[2]:
 ---
 ### re.split
 
-Аналогичным образом можно избавиться и от запятых:
+Подібним чином можна позбутися ком:
 
 ```python
 In [3]: re.split('[ ,]+', ospf_route)
@@ -1403,20 +595,10 @@ Out[3]:
 ---
 ### re.split
 
-И, если нужно, от квадратных скобок:
+Функція split має особливість роботи з групами (вирази в круглих дужках).  
+Якщо вказати те ж таки вираз за допомогою круглих дужок, у кінцевий список потраплять і роздільники.
 
-```python
-In [4]: re.split('[ ,\[\]]+', ospf_route)
-Out[4]: ['O', '10.0.24.0/24', '110/41', 'via', '10.0.13.3', '3d18h', 'FastEthernet0/0']
-```
-
----
-### re.split
-
-У функции split есть особенность работы с группами \(выражения в круглых скобках\).  
-Если указать то же выражение с помощью круглых скобок, в итоговый список попадут и разделители.
-
-Например, в выражении как разделитель добавлено слово via:
+Наприклад, у виразі як роздільник додано слово via:
 
 ```python
 In [5]: re.split('(via|[ ,\[\]])+', ospf_route)
@@ -1437,8 +619,9 @@ Out[5]:
 ---
 ### re.split
 
-Для отключения такого поведения надо сделать группу noncapture.  
-То есть, отключить запоминание элементов группы:
+Для відключення такої поведінки треба зробити групу не Capture.  
+Тобто відключити запам'ятовування елементів групи:
+
 
 ```python
 In [6]: re.split('(?:via|[ ,\[\]])+', ospf_route)
@@ -1451,10 +634,11 @@ Out[6]: ['O', '10.0.24.0/24', '110/41', '10.0.13.3', '3d18h', 'FastEthernet0/0']
 ---
 ### re.sub
 
-Функция re.sub работает аналогично методу replace в строках.  
-Но в функции re.sub можно использовать регулярные выражения, а значит, делать замены по более сложным условиям.
+Функція re.sub працює подібно до методу replace у рядках.  
+Але у функції re.sub ви можете використовувати регулярні вирази, що означає, що ви можете робити заміни на основі складніших умов.
 
-Заменим запятые, квадратные скобки и слово via на пробел в строке ospf\_route:
+Замініть коми, квадратні дужки та слово via пробілом у рядку ospf_route:
+
 
 ```python
 In [7]: ospf_route = 'O    10.0.24.0/24 [110/41] via 10.0.13.3, 3d18h, FastEthernet0/0'
@@ -1465,9 +649,6 @@ Out[8]: 'O        10.0.24.0/24  110/41    10.0.13.3  3d18h  FastEthernet0/0'
 
 ---
 ### re.sub
-
-С помощью re.sub можно трансформировать строку.  
-Например, преобразовать строку mac\_table таким образом:
 
 ```python
 In [9]: mac_table = '''
@@ -1498,21 +679,3 @@ In [4]: print(re.sub(' *(\d+) +'
 300 aabb:cc70:7000 Gi0/7
 ```
 
----
-### re.sub
-
-Регулярное выражение разделено на группы:
-
-* ```(\d+)``` - первая группа. Сюда попадет номер VLAN
-* ```([a-f,0-9]+).([a-f,0-9]+).([a-f,0-9]+)``` - три следующие группы (2, 3, 4) описывают MAC-адрес
-* ```(\S+)``` - пятая группа. Описывает интерфейс.
-
----
-### re.sub
-
-Во втором регулярном выражении эти группы используются.  
-Для того, чтобы сослаться на группу, используется обратный слеш и номер группы.  
-Чтобы не пришлось экранировать обратный слеш, используется raw строка.
-
-В итоге вместо номеров групп будут подставлены соответствующие подстроки.  
-Для примера, также изменен формат записи MAC-адреса.
