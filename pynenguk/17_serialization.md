@@ -26,6 +26,111 @@
   * наприклад, це можуть бути налаштування для різних об'єктів (IP-адреси, VLAN тощо)
 
 ---
+## csv
+
+```
+"status","network","netmask","nexthop","metric","locprf","weight","path","origin"
+"*","1.0.0.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 15169","i"
+"*>","1.0.0.0","24","200.219.145.23",NA,NA,0,"53242 7738 15169","i"
+"*","1.0.4.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 1299 7545 56203","i"
+"*>","1.0.4.0","24","200.219.145.23",NA,NA,0,"53242 12956 174 7545 56203","i"
+"*","1.0.5.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 1299 7545 56203","i"
+"*>","1.0.5.0","24","200.219.145.23",NA,NA,0,"53242 12956 174 7545 56203","i"
+"*","1.0.6.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 2828 4826 38803 56203","i"
+"*>","1.0.6.0","24","200.219.145.23",NA,NA,0,"53242 7738 6939 4826 38803 56203","i"
+"*","1.0.7.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 2828 4826 38803 56203","i"
+"*>","1.0.7.0","24","200.219.145.23",NA,NA,0,"53242 7738 6939 4826 38803 56203","i"
+"*","1.0.11.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 10026 18046","i"
+"*>","1.0.11.0","24","200.219.145.23",NA,NA,0,"53242 12956 174 10026 18046","i"
+"*","1.0.12.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 10026 18046","i"
+"*>","1.0.12.0","24","200.219.145.23",NA,NA,0,"53242 12956 174 10026 18046","i"
+"*","1.0.13.0","24","200.219.145.45",NA,NA,0,"28135 18881 3549 10026 18046","i"
+"*>","1.0.13.0","24","200.219.145.23",NA,NA,0,"53242 12956 174 10026 18046","i"
+"*","1.0.20.0","23","200.219.145.45",NA,NA,0,"28135 18881 3549 6762 10026 2519","i"
+"*>","1.0.20.0","23","200.219.145.23",NA,NA,0,"53242 12956 2516 2519","i"
+"*","1.0.22.0","23","200.219.145.45",NA,NA,0,"28135 18881 3549 6762 10026 2519","i"
+"*>","1.0.22.0","23","200.219.145.23",NA,NA,0,"53242 12956 2516 2519","i"
+"*","1.0.24.0","23","200.219.145.45",NA,NA,0,"28135 18881 3549 6762 10026 2519","i"
+"*>","1.0.24.0","23","200.219.145.23",NA,NA,0,"53242 12956 2516 2519","i"
+"*","1.0.26.0","23","200.219.145.45",NA,NA,0,"28135 18881 3549 6762 10026 2519","i"
+"*>","1.0.26.0","23","200.219.145.23",NA,NA,0,"53242 12956 2516 2519","i"
+"*","1.0.28.0","22","200.219.145.45",NA,NA,0,"28135 18881 3549 6762 10026 2519","i"
+"*>","1.0.28.0","22","200.219.145.23",NA,NA,0,"53242 12956 2516 2519","i"
+```
+---
+## yaml
+
+```yaml
+---
+
+- name: Run cfg commands on routers
+  hosts: cisco-routers
+  gather_facts: false
+  connection: local
+
+  tasks:
+
+    - name: Config line vty
+      ios_config:
+        parents:
+          - line vty 0 4
+        lines:
+          - login local
+          - transport input ssh
+        provider: "{{ cli }}"
+      notify: save config
+
+    - name: Send config commands
+      ios_config:
+        lines:
+          - service password-encryption
+          - no ip http server
+          - no ip http secure-server
+          - no ip domain lookup
+        provider: "{{ cli }}"
+      notify: save config
+```
+
+---
+## json
+
+```json
+{
+     "login": "pyneng",
+     "id": 28531730,
+     "node_id": "MDQ6VXNlcjI4NTMxNzMw",
+     "avatar_url": "https://avatars.githubusercontent.com/u/28531730?v=4",
+     "gravatar_id": "",
+     "url": "https://api.github.com/users/pyneng",
+     "html_url": "https://github.com/pyneng",
+     "followers_url": "https://api.github.com/users/pyneng/followers",
+     "following_url": "https://api.github.com/users/pyneng/following{/other_user}",
+     "gists_url": "https://api.github.com/users/pyneng/gists{/gist_id}",
+     "starred_url": "https://api.github.com/users/pyneng/starred{/owner}{/repo}",
+     "subscriptions_url": "https://api.github.com/users/pyneng/subscriptions",
+     "organizations_url": "https://api.github.com/users/pyneng/orgs",
+     "repos_url": "https://api.github.com/users/pyneng/repos",
+     "events_url": "https://api.github.com/users/pyneng/events{/privacy}",
+     "received_events_url": "https://api.github.com/users/pyneng/received_events",
+     "type": "User",
+     "site_admin": false,
+     "name": "Наташа Самойленко",
+     "company": null,
+     "blog": "https://pyneng.github.io/",
+     "location": null,
+     "email": null,
+     "hireable": null,
+     "bio": null,
+     "twitter_username": "natenka_says",
+     "public_repos": 32,
+     "public_gists": 0,
+     "followers": 194,
+     "following": 12,
+     "created_at": "2017-05-08T11:02:10Z",
+     "updated_at": "2021-07-19T12:20:57Z"
+}
+```
+---
 
 ## Робота з файлами CSV
 
